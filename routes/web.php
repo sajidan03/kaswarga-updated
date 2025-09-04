@@ -27,6 +27,9 @@ Route::middleware(['auth', 'verified'])
         Route::get('member', [MemberController::class, 'index'])->name('memberView');
         Route::get('category', [CategoryController::class, 'index'])->name('categoryView');
         //
+
+        //
+        Route::get('user/tambah', [UserController::class, 'tambahView'])->name('userTambahView');
     });
 
 
