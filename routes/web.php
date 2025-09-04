@@ -31,6 +31,9 @@ Route::middleware(['auth', 'verified'])
         //
         Route::get('user/tambah', [UserController::class, 'tambahView'])->name('userTambahView');
         Route::post('user/tambah', [UserController::class, 'simpan'])->name('userTambah');
+        //
+        Route::get('user/edit/{id}', [UserController::class, 'userEditView'])->name('userEditView');
+        Route::post('user/edit/{id}', [UserController::class, '']);
     });
 
 

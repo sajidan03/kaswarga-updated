@@ -23,7 +23,7 @@ export default function Dashboard() {
 
   const handleDelete = (id: number) => {
     if (confirm('Apakah Anda yakin ingin menghapus user ini?')) {
-      router.delete(`/user/${id}`)
+      router.delete(`/admin/user/${id}`)
     }
   }
 
@@ -57,32 +57,32 @@ export default function Dashboard() {
             </thead>
             <tbody className="text-gray-600">
               {users.length > 0 ? (
-                users.map((user, index) => (
-                  <tr key={user.id} className="border-b hover:bg-gray-50">
+                users.map((users, index) => (
+                  <tr key={users.id} className="border-b hover:bg-gray-50">
                     <td className="px-4 py-3">{index + 1}</td>
-                    <td className="px-4 py-3">{user.name}</td>
-                    <td className="px-4 py-3">{user.email}</td>
+                    <td className="px-4 py-3">{users.name}</td>
+                    <td className="px-4 py-3">{users.email}</td>
                     <td className="px-4 py-3">
                       <span
                         className={`px-2 py-1 text-xs rounded-md ${
-                          user.role === 'admin'
+                          users.role === 'admin'
                             ? 'bg-red-100 text-red-700'
                             : 'bg-blue-100 text-blue-700'
                         }`}
                       >
-                        {user.role}
+                        {users.role}
                       </span>
                     </td>
-                    <td className="px-4 py-3">{user.created_at}</td>
+                    <td className="px-4 py-3">{users.created_at}</td>
                     <td className="px-4 py-3 flex items-center justify-center gap-2">
                       <Link
-                        href={`/user/${user.id}/edit`}
+                        href={`/admin/user/edit/${users.encrypted_id}`}
                         className="px-3 py-1 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700"
                       >
                         Edit
                       </Link>
                       <button
-                        onClick={() => handleDelete(user.id)}
+                        onClick={() => handleDelete(users.id)}
                         className="px-3 py-1 bg-red-600 text-white text-sm rounded-md hover:bg-red-700"
                       >
                         Hapus

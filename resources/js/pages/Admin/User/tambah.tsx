@@ -26,7 +26,7 @@ export default function Create() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    post('/user')
+    post('/admin/user/tambah')
   }
 
   return (
@@ -98,7 +98,7 @@ export default function Create() {
             {/* Tombol */}
             <div className="col-span-1 md:col-span-2 flex justify-between items-center mt-4">
               <Link
-                href="userTambah"
+                href="/admin/user/"
                 className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
               >
                 Kembali

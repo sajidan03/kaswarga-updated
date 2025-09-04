@@ -201,6 +201,7 @@ import { login } from '@/routes';
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
+import {motion} from 'framer-motion';
 
 export default function Welcome() {
     const { auth } = usePage<SharedData>().props;
@@ -215,7 +216,11 @@ export default function Welcome() {
 
             <div className="bg-gray-900 min-h-screen">
                 {/* Header */}
-                <header className="absolute inset-x-0 top-0 z-50">
+                <motion.header
+                initial={{ y: 50, opacity: 0 }}     // mulai agak turun
+                animate={{ y: 0, opacity: 1 }}       // naik ke posisi normal
+                transition={{ duration: 1, ease: "easeOut" }}
+                className="absolute inset-x-0 top-0 z-50">
                     <nav className="flex items-center justify-between p-6 lg:px-8">
                         <div className="flex lg:flex-1">
                             <Link href="/" className="-m-1.5 p-1.5 flex items-center">
@@ -361,7 +366,7 @@ export default function Welcome() {
                             </div>
                         </div>
                     )}
-                </header>
+                </motion.header>
 
                 {/* Main content */}
                 <div className="relative isolate px-6 pt-14 lg:px-8">
@@ -441,7 +446,12 @@ export default function Welcome() {
                 </div>
 
                 {/* Features Section */}
-                <section id="fitur" className="py-24 sm:py-32 bg-gray-900">
+                <motion.section
+                initial={{ y: 50, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}   // animasi aktif saat terlihat
+                viewport={{ once: true, amount: 0.2 }} // hanya sekali, muncul kalau 20% kelihatan
+                transition={{ duration: 1, ease: "easeOut" }}
+                id="fitur" className="py-24 sm:py-32 bg-gray-900">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <div className="mx-auto max-w-2xl lg:text-center">
                             <h2 className="text-base/7 font-semibold text-teal-400">Fitur Unggulan</h2>
@@ -522,7 +532,7 @@ export default function Welcome() {
                             </div>
                         </div>
                     </div>
-                </section>
+                </motion.section>
 
                 {/* Testimonial Section */}
                 <section id="testimoni" className="py-24 sm:py-32 bg-gray-900">
