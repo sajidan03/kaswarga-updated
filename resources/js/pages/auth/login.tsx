@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
 import { request } from '@/routes/password';
 import { Form, Head } from '@inertiajs/react';
-import { LoaderCircle } from 'lucide-react';
+import { LoaderCircle, LogIn } from 'lucide-react';
 
 interface LoginProps {
     status?: string;
@@ -44,7 +44,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                     <Label htmlFor="password">Password</Label>
                                     {canResetPassword && (
                                         <TextLink href={request()} className="ml-auto text-sm" tabIndex={5}>
-                                            Forgot password?
+                                            Lupa kata sandi?
                                         </TextLink>
                                     )}
                                 </div>
@@ -61,12 +61,27 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                             </div>
 
                             <div className="flex items-center space-x-3">
-                                <Checkbox id="remember" name="remember" tabIndex={3} />
-                                <Label htmlFor="remember">Remember me</Label>
+                            <Checkbox
+                            id="remember"
+                            name="remember"
+                            tabIndex={3}
+                            className="data-[state=checked]:bg-teal-600 data-[state=checked]:border-teal-600"
+                            />
+                                <Label htmlFor="remember">Ingat saya</Label>
                             </div>
 
-                            <Button type="submit" className="mt-4 w-full" tabIndex={4} disabled={processing}>
-                                {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+
+                            <Button
+                                type="submit"
+                                className="mt-4 w-full bg-teal-600 hover:bg-teal-700 text-white"
+                                tabIndex={4}
+                                disabled={processing}
+                            >
+                                {processing ? (
+                                    <LoaderCircle className="h-4 w-4 animate-spin" />
+                                ) : (
+                                    <LogIn className="mr-2 h-4 w-4" />
+                                )}
                                 Log in
                             </Button>
                         </div>

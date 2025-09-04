@@ -1,14 +1,12 @@
-import AppLogoIcon from './app-logo-icon';
-
 export default function AppLogo() {
     return (
         <>
-            <div className="flex aspect-square size-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
-                <AppLogoIcon className="size-5 fill-current text-white dark:text-black" />
-            </div>
-            <div className="ml-1 grid flex-1 text-left text-sm">
-                <span className="mb-0.5 truncate leading-tight font-semibold">Laravel Starter Kit</span>
-            </div>
+            <div className=" flex items-center">
+                                <div className="mr-3 flex h-12 w-12 items-center justify-center rounded-full bg-teal-100 text-teal-600 dark:bg-teal-900 dark:text-teal-300">
+                                <h1 className="text-xl font-bold">K</h1>
+                                </div>
+                                <h1 className="text-xl font-bold text-teal-700 dark:text-teal-400 -ml-2">aswarga</h1>
+                            </div>
         </>
     );
 }
