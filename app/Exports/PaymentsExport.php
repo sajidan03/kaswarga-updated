@@ -23,9 +23,9 @@ class PaymentsExport implements FromCollection, WithHeadings, WithMapping
         return [
             $payment->created_at->format('d/m/Y'),
             $payment->user->name ?? 'Tidak Diketahui',
-            $payment->petugas->name ?? 'Tidak Diketahui',
-            $payment->member->nama ?? 'Tidak Diketahui',
-            number_format($payment->nominal, 0, ',', '.'),
+            $payment->officer->user->name ?? 'Tidak Diketahui',
+            $payment->member->user->name ?? 'Tidak Diketahui',
+            ($payment->nominal ?? 0),
             $payment->keterangan ?? '-',
             $payment->status
         ];
