@@ -15,7 +15,7 @@ class PaymentsExport implements FromCollection, WithHeadings, WithMapping
         $payments = Payment::with(['user', 'petugas', 'member'])
             ->orderBy('created_at', 'desc')
             ->get();
-            return $payments;
+        return $payments;
     }
 
     public function map($payment): array
@@ -23,7 +23,7 @@ class PaymentsExport implements FromCollection, WithHeadings, WithMapping
         return [
             $payment->created_at->format('d/m/Y'),
             $payment->user->name ?? 'Tidak Diketahui',
-            $payment->officer->user->name ?? 'Tidak Diketahui',
+            $payment->petugas->user->name ?? 'Tidak Diketahui',
             $payment->member->user->name ?? 'Tidak Diketahui',
             ($payment->nominal ?? 0),
             $payment->keterangan ?? '-',
