@@ -1,5 +1,5 @@
 import AppLayout from "@/layouts/warga-layout"
-import { Head, router } from "@inertiajs/react"
+import { Head } from "@inertiajs/react"
 import { BreadcrumbItem } from "@/types"
 import {
   Card,
@@ -15,9 +15,7 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
-import { DollarSign, Calendar, CreditCard, Download, FileText } from "lucide-react"
-import { get } from "http"
+import { DollarSign, Calendar, CreditCard, Download } from "lucide-react"
 
 type Payment = {
   id: number
@@ -59,12 +57,6 @@ export default function WargaDashboard({ payments, user }: WargaDashboardProps) 
       year: 'numeric'
     })
   }
-
-const exportToExcel = () => {
-  const link = document.createElement('a')
-  link.href = router.route('paymentExport')
-  link.click()
-}
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
@@ -143,18 +135,17 @@ const exportToExcel = () => {
                 Riwayat Pembayaran
               </CardTitle>
 
-              {/* Button Export */}
+              {/* Button Export dengan tag <a> langsung */}
               {payments.length > 0 && (
                 <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={exportToExcel}
-                    className="flex items-center gap-2"
+                  <a
+                    href="/warga/export/{{user.id}}"
+                    download
+                    className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 gap-2"
                   >
                     <Download className="h-4 w-4" />
                     Export Excel
-                  </Button>
+                  </a>
                 </div>
               )}
             </CardHeader>

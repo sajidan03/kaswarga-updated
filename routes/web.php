@@ -31,7 +31,6 @@ Route::middleware(['auth', 'verified'])
         Route::get('kas/laporan', [LaporanKas::class, 'index'])->name('laporanKasView');
         //
         Route::get('user/export', [UserController::class, 'export'])->name('userExport');
-        Route::get('warga/export', [PaymentController::class, 'export'])->name('paymentExport');
         //
         Route::get('kas/pemasukan', [PemasukanKas::class, 'pemasukanView'])->name('pemasukanView');
         Route::post('kas/pemasukan', [PemasukanKas::class, 'pemasukanTambah'])->name('pemasukanTambah');
@@ -67,6 +66,8 @@ Route::middleware(['auth', 'verified'])
 Route::middleware(['auth', 'verified'])
     ->prefix('warga')
     ->group(function () {
+        Route::get('export', [WargaController::class, 'export'])->name('paymentExport');
+        Route::get('export/{id}', [WargaController::class, 'exportWarga'])->name('paymentExport');
         Route::get('dashboard', [WargaController::class, 'wargaView'])->name('wargaView');
     });
 

@@ -13,7 +13,5 @@ class PaymentController extends Controller
         public function index(){
         return Inertia::render('Admin/Payment/index', []);
     }
-    public function export(){
-        return Excel::download(new PaymentsExport, 'payments.xlsx');
-    }
+
 }
