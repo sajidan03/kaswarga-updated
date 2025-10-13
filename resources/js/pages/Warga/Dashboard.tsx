@@ -1,4 +1,4 @@
-import AppLayout from "@/layouts/warga-layout"
+import AppLayout from "@/layouts/app-layout"
 import { Head } from "@inertiajs/react"
 import { BreadcrumbItem } from "@/types"
 import {

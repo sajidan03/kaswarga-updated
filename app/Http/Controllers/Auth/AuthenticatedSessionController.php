@@ -42,7 +42,6 @@ class AuthenticatedSessionController extends Controller
 
     $user = Auth::user();
 
-    // Cek role dan redirect sesuai role
     if ($user->role === 'admin') {
         return redirect()->route('admin.dashboard');
     } elseif ($user->role === 'warga') {
@@ -51,7 +50,6 @@ class AuthenticatedSessionController extends Controller
         return redirect()->route('petugas.dashboard');
     }
 
-    // fallback default
     return redirect()->intended('/');
 }
 

@@ -1,4 +1,4 @@
-import AppLayout from '@/layouts/officer-layout';
+import AppLayout from '@/layouts/app-layout';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { type BreadcrumbItem } from '@/types';
 
