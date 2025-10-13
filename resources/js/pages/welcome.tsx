@@ -1,13 +1,24 @@
-import { login } from '@/routes';
+import { login, userEdit } from '@/routes';
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import {motion} from 'framer-motion';
 
+interface ProfilWebsite {
+    nama: string
+    nama_kepala: string
+    foto_kepala: string
+    logo: string
+    hero: string
+}
+interface WelcomeProps {
+    profil: ProfilWebsite;
+    [key: string]: unknown;
+}
 export default function Welcome() {
-    const { auth } = usePage<SharedData>().props;
+    const { auth, profil } = usePage<WelcomeProps>().props;
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
+    console.log(profil)
     return (
         <>
             <Head title="Selamat Datang di Kaswarga">
@@ -18,17 +29,21 @@ export default function Welcome() {
             <div className="bg-gray-900 min-h-screen">
                 {/* Header */}
                 <motion.header
-                initial={{ y: 50, opacity: 0 }}     // mulai agak turun
-                animate={{ y: 0, opacity: 1 }}       // naik ke posisi normal
+                initial={{ y: 50, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 1, ease: "easeOut" }}
                 className="absolute inset-x-0 top-0 z-50">
                     <nav className="flex items-center justify-between p-6 lg:px-8">
                         <div className="flex lg:flex-1">
                             <Link href="/" className="-m-1.5 p-1.5 flex items-center">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-500 text-white mr-2">
-                                    <span className="text-lg font-bold">K</span>
+                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-500 text-white mr-2 overflow-hidden">
+                                    <img
+                                        src={`/storage/assets/${profil.logo}`}
+                                        alt="Logo"
+                                        className="w-full h-full object-cover"
+                                    />
                                 </div>
-                                <span className="text-xl font-bold text-white -py-3">aswarga</span>
+                                <span className="text-xl font-bold text-white -py-3">{profil.nama.slice(1)}</span>
                             </Link>
                         </div>
                         <div className="flex lg:hidden">
@@ -169,9 +184,17 @@ export default function Welcome() {
                     )}
                 </motion.header>
 
-                {/* Main content */}
-                <div className="relative isolate px-6 pt-14 lg:px-8">
-                    {/* Background effects */}
+                <div className="relative isolate px-6 pt-14 lg:px-8 min-h-screen flex items-center">
+                    <div className="absolute inset-0 -z-10">
+                        <div
+                            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                            style={{
+                                backgroundImage: `url("/storage/assets/${profil.hero}")`
+                            }}
+                        />
+                        <div className="absolute inset-0 bg-black/60"></div>
+                    </div>
+
                     <div
                         aria-hidden="true"
                         className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
@@ -181,13 +204,13 @@ export default function Welcome() {
                                 clipPath:
                                     'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
                             }}
-                            className="relative left-[calc(50%-11rem)] aspect-1155/678 w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#80ffd4] to-[#fc80ff] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
+                            className="relative left-[calc(50%-11rem)] aspect-1155/678 w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#80ffd4] to-[#fc80ff] opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
                         />
                     </div>
 
-                    <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
+                    <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-32 relative z-10">
                         <div className="hidden sm:mb-8 sm:flex sm:justify-center">
-                            <div className="relative rounded-full px-3 py-1 text-sm/6 text-gray-400 ring-1 ring-white/10 hover:ring-white/20">
+                            <div className="relative rounded-full px-3 py-1 text-sm/6 text-gray-200 ring-1 ring-white/20 hover:ring-white/30 backdrop-blur-sm">
                                 Platform terbaru untuk mengelola keuangan warga.{' '}
                                 <a href="#tentang" className="font-semibold text-teal-400">
                                     <span aria-hidden="true" className="absolute inset-0" />
@@ -196,18 +219,33 @@ export default function Welcome() {
                             </div>
                         </div>
                         <div className="text-center">
-                            <h1 className="text-5xl font-semibold tracking-tight text-balance text-white sm:text-7xl">
+                            <motion.h1
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: 0.2 }}
+                                className="text-5xl font-semibold tracking-tight text-balance text-white sm:text-7xl"
+                            >
                                 Kelola Keuangan Warga dengan Mudah
-                            </h1>
-                            <p className="mt-8 text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">
+                            </motion.h1>
+                            <motion.p
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: 0.4 }}
+                                className="mt-8 text-lg font-medium text-pretty text-gray-200 sm:text-xl/8"
+                            >
                                 Aplikasi manajemen kas untuk lingkungan Anda. Pantau pemasukan, pengeluaran,
                                 dan laporan keuangan warga secara transparan dan efisien.
-                            </p>
-                            <div className="mt-10 flex items-center justify-center gap-x-6">
+                            </motion.p>
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: 0.6 }}
+                                className="mt-10 flex items-center justify-center gap-x-6"
+                            >
                                 {auth.user ? (
                                     <Link
                                         href={login()}
-                                        className="rounded-md bg-teal-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-teal-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500"
+                                        className="rounded-md bg-teal-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-teal-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500 transition-colors duration-200"
                                     >
                                         Masuk ke Dashboard
                                     </Link>
@@ -215,19 +253,19 @@ export default function Welcome() {
                                     <>
                                         <Link
                                             href={login()}
-                                            className="rounded-md bg-teal-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-teal-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500"
+                                            className="rounded-md bg-teal-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-teal-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500 transition-colors duration-200"
                                         >
                                             Mulai Sekarang
                                         </Link>
                                         <Link
                                             href={login()}
-                                            className="text-sm/6 font-semibold text-white hover:text-teal-400"
+                                            className="text-sm/6 font-semibold text-white hover:text-teal-400 transition-colors duration-200"
                                         >
                                             Masuk ke Akun <span aria-hidden="true">→</span>
                                         </Link>
                                     </>
                                 )}
-                            </div>
+                            </motion.div>
                         </div>
                     </div>
 
@@ -241,7 +279,7 @@ export default function Welcome() {
                                 clipPath:
                                     'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
                             }}
-                            className="relative left-[calc(50%+3rem)] aspect-1155/678 w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#80ffd4] to-[#fc80ff] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
+                            className="relative left-[calc(50%+3rem)] aspect-1155/678 w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#80ffd4] to-[#fc80ff] opacity-20 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
                         />
                     </div>
                 </div>
@@ -260,7 +298,7 @@ export default function Welcome() {
                                 Semua yang Anda butuhkan untuk mengelola kas warga
                             </p>
                             <p className="mt-6 text-lg/8 text-gray-400">
-                                Kaswarga menyediakan berbagai fitur lengkap untuk memudahkan pengelolaan keuangan lingkungan Anda.
+                                {profil.nama} menyediakan berbagai fitur lengkap untuk memudahkan pengelolaan keuangan lingkungan Anda.
                             </p>
                         </div>
                         <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">

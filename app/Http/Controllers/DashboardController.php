@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Member;
 use App\Models\Payment;
 use App\Models\Category;
+use App\Models\ProfilWebsite;
 use Inertia\Inertia;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -84,13 +85,14 @@ class DashboardController extends Controller
             'recent_payments' => $recentPayments,
             'revenue_growth' => (float) number_format($revenueGrowth, 1)
         ]);
+        $profil = ProfilWebsite::all()->first();
 
         return Inertia::render('Admin/Dashboard', [
-            'dashboardData' => $dashboardData
+            'dashboardData' => $dashboardData,
+            'profil' => $profil,
         ]);
     }
 
-    // Alternatif: Query yang lebih efisien untuk data bulanan
    private function getMonthlyRevenueData()
 {
     $monthlyRevenue = Payment::select(

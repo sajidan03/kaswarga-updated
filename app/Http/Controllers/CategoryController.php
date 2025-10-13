@@ -3,29 +3,34 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\ProfilWebsite;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Inertia\Inertia;
+use Pest\Plugins\Profile;
 
 class CategoryController extends Controller
 {
     public function index()
     {
         $categories = Category::all();
-        
+
         $categories->each(function($category) {
             $category->encrypted_id = Crypt::encryptString($category->id);
         });
+        $profil = ProfilWebsite::all()->first();
 
         return Inertia::render('Admin/Category/index', [
-            'categories' => $categories
+            'categories' => $categories,
+            'profil' => $profil,
         ]);
     }
 
     public function categoryTambahView()
     {
-        return Inertia::render('Admin/Category/tambah');
+        $data['profil'] = ProfilWebsite::all()->first();
+        return Inertia::render('Admin/Category/tambah', $data);
     }
 
     public function categoryTambah(Request $request)
@@ -50,15 +55,16 @@ class CategoryController extends Controller
         } catch (DecryptException $e) {
             abort(404, 'ID tidak valid');
         }
-        
+
         $category = Category::findOrFail($id);
-        
+
         $category->encrypted_id = Crypt::encryptString($category->id);
-        
+        $profil = ProfilWebsite::all()->first();
         return Inertia::render('Admin/Category/edit', [
-            'category' => $category
+            'category' => $category,
+            'profil' => $profil,
         ]);
-    } 
+    }
 
     public function categoryEdit(Request $request, $id)
     {

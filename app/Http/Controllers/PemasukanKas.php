@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pemasukan;
+use App\Models\ProfilWebsite;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -12,7 +13,7 @@ class PemasukanKas extends Controller
    public function pemasukanView()
     {
         $pemasukan['pemasukan'] = Pemasukan::orderBy('tanggal', 'desc')->get();
-
+        $pemasukan['profil'] = ProfilWebsite::all()->first();
         return Inertia::render('Admin/Kas/Pemasukan', $pemasukan);
     }
 

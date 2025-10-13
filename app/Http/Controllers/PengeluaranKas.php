@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pengeluaran;
+use App\Models\ProfilWebsite;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -12,7 +13,7 @@ class PengeluaranKas extends Controller
     public function pengeluaranView()
     {
         $pengeluaran['pengeluaran'] = Pengeluaran::orderBy('tanggal', 'desc')->get();
-
+        $pengeluaran['profil'] = ProfilWebsite::all()->first();
         return Inertia::render('Admin/Kas/Pengeluaran', $pengeluaran);
     }
     public function pengeluaranTambah(Request $request)

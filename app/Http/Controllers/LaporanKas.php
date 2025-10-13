@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\Pemasukan;
 use App\Models\Pengeluaran;
+use App\Models\ProfilWebsite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -102,7 +103,7 @@ class LaporanKas extends Controller
         $saldoAkhir = $totalPemasukan - $totalPengeluaran;
 
         $monthOptions = $this->generateMonthOptions();
-
+        $profil = ProfilWebsite::all()->first();
         return Inertia::render('Admin/Kas/LaporanKas', [
             'transaksi' => $transaksi,
             'total_pemasukan' => $totalPemasukan,
@@ -113,7 +114,8 @@ class LaporanKas extends Controller
                 'jenis' => $jenis ?? 'all',
                 'search' => $search ?? '',
             ],
-            'monthOptions' => $monthOptions
+            'monthOptions' => $monthOptions,
+            'profil' => $profil
         ]);
     }
 

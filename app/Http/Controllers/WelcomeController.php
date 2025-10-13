@@ -1,0 +1,16 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\ProfilWebsite;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+
+class WelcomeController extends Controller
+{
+    //
+    public function index(){
+        $data['profil'] = ProfilWebsite::all()->first();
+        return Inertia::render('welcome', $data);
+    }
+}

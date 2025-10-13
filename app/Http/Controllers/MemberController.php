@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Member;
+use App\Models\ProfilWebsite;
 use App\Models\User;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
@@ -15,13 +16,14 @@ class MemberController extends Controller
     public function index()
     {
         $members = Member::with(['user', 'category'])->get();
-        
+
         $members->each(function($member) {
             $member->encrypted_id = Crypt::encryptString($member->id);
         });
-
+        $profil = ProfilWebsite::all()->first();
         return Inertia::render('Admin/Member/index', [
-            'members' => $members
+            'members' => $members,
+            'profil' => $profil
         ]);
     }
 
@@ -29,7 +31,8 @@ class MemberController extends Controller
     {
         $users = User::where('role', 'warga')->get();
         $categories = Category::all();
-        return Inertia::render('Admin/Member/tambah', compact('users', 'categories'));
+        $profil = ProfilWebsite::all()->first();
+        return Inertia::render('Admin/Member/tambah', compact('users', 'categories', 'profil'));
     }
 
     public function memberTambah(Request $request)
@@ -56,11 +59,13 @@ public function memberEditView($id)
     $categories = Category::all();
 
     $member->encrypted_id = Crypt::encryptString($member->id);
+    $profil = ProfilWebsite::all()->first();
 
     return Inertia::render('Admin/Member/edit', [
         'member' => $member,
         'users' => $users,
-        'categories' => $categories
+        'categories' => $categories,
+        'profil' => $profil
     ]);
 }
 

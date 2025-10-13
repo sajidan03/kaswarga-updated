@@ -1,4 +1,4 @@
-import AppLayout from '@/layouts/officer-layout';
+import AppLayout from '@/layouts/app-layout';
 import { Head, Link, usePage, router } from '@inertiajs/react';
 import { type BreadcrumbItem } from '@/types';
 import { useState, useEffect } from 'react';
@@ -50,22 +50,22 @@ export default function PaymentDetail() {
   // Validasi apakah nominal adalah kelipatan 10
   const validateNominal = (value: string) => {
     const numericValue = parseInt(value);
-    
+
     if (value === '') {
       setValidationError('');
       return true;
     }
-    
+
     if (isNaN(numericValue)) {
       setValidationError('Harus berupa angka');
       return false;
     }
-    
+
     if (numericValue % 10 !== 0) {
       setValidationError('Nominal harus kelipatan 10');
       return false;
     }
-    
+
     if (numericValue <= 0) {
       setValidationError('Nominal harus lebih dari 0');
       return false;
@@ -83,13 +83,13 @@ export default function PaymentDetail() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateNominal(nominal)) {
       return;
     }
 
     const numericNominal = parseInt(nominal);
-    
+
     if (numericNominal <= 0) {
       setValidationError('Nominal harus lebih dari 0');
       return;

@@ -9,6 +9,7 @@ use App\Models\Member;
 use App\Models\Category;
 use App\Models\Pemasukan;
 use App\Models\Pengeluaran;
+use App\Models\ProfilWebsite;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -132,6 +133,19 @@ class DatabaseSeeder extends Seeder
             'nominal' => 5000,
             'tanggal' => '2025-05-01',
             'keterangan' => 'Belanja Bulanan',
+        ]);
+        ProfilWebsite::create([
+            'nama'=> 'Kaswarga',
+            'nama_kepala' => 'Muhammad Sajidan Rifansyah',
+            'foto_kepala' => 'kepala.jpg',
+            'logo' => 'logo.jpg',
+            'hero' => 'hero.jpg',
+            'tahun_berdiri' => '2003',
+            'alamat' => 'Jl. Garut-Tasikmalaya, Salawu',
+            'instagram' => 'https://instagram.com/sajidan03',
+            'facebook' => 'https://instagram.com/sajidan03',
+            'youtube' => 'https://instagram.com/sajidan03',
+            'gmap' => 'https://maps.app.goo.gl/okJ2ckAM9ncc2Poq6',
         ]);
     }
 }

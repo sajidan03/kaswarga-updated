@@ -5,7 +5,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { dashboard, logout } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link, router, usePage } from '@inertiajs/react';
-import { LayoutGrid, User, ChartColumnStacked, UserCircle, Banknote, History, LogOut,} from 'lucide-react';
+import { LayoutGrid, User, ChartColumnStacked, UserCircle, Banknote, History, LogOut, Icon, UserCheck2,} from 'lucide-react';
 import AppLogo from './app-logo';
 
 const adminNavItems: NavItem[] = [
@@ -53,6 +53,11 @@ const adminNavItems: NavItem[] = [
         title: 'Kas Keluar',
         href: '/admin/kas/pengeluaran',
         icon: Banknote,
+    },
+    {
+        title: 'Profil Website',
+        href: '/admin/profil',
+        icon: UserCheck2,
     }
 
 ];

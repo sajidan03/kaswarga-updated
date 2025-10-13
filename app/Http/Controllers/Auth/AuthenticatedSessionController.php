@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\ProfilWebsite;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +19,9 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(Request $request): Response
     {
+        $profil = ProfilWebsite::all()->first();
         return Inertia::render('auth/login', [
+            'profil' => $profil,
             'canResetPassword' => Route::has('password.request'),
             'status' => $request->session()->get('status'),
         ]);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\UsersExport;
+use App\Models\ProfilWebsite;
 use App\Models\User;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
@@ -25,7 +26,7 @@ class UserController extends Controller
                 'encrypted_id' => Crypt::encrypt($user->id),
             ];
         });
-
+        $users['profil'] = ProfilWebsite::all()->first();
         return Inertia::render('Admin/User/index', $users);
     }
 
@@ -38,15 +39,17 @@ class UserController extends Controller
         }
 
         $user = User::findOrFail($id);
-
+        $profil = ProfilWebsite::all()->first();
         return Inertia::render('Admin/User/edit', [
-            'user' => $user
+            'user' => $user,
+            'profil' => $profil
         ]);
     }
 
     public function tambahView()
     {
-        return Inertia::render('Admin/User/tambah');
+        $data['profil'] = ProfilWebsite::all()->first();
+        return Inertia::render('Admin/User/tambah', $data);
     }
 
  public function simpan(Request $request)

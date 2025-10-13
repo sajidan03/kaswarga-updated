@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\PaymentsExport;
 use App\Models\Payment;
+use App\Models\ProfilWebsite;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\User;
@@ -15,6 +16,7 @@ class WargaController extends Controller
 {
     public function index()
     {
+        $warga['profil'] = ProfilWebsite::all()->first();
         $warga['warga'] = User::where('role', 'warga')->get();
         return Inertia::render('Admin/Warga/index', $warga);
     }
@@ -56,10 +58,11 @@ class WargaController extends Controller
             'payments_count' => $payments->count(),
             'payments' => $payments->toArray()
         ]);
-
+        $profil = ProfilWebsite::all()->first();
         return Inertia::render('Warga/Dashboard', [
             'payments' => $payments,
-            'user' => $user
+            'user' => $user,
+            'profil' => $profil
         ]);
     }
 }
