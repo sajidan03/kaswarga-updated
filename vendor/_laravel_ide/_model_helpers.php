@@ -1912,6 +1912,7 @@ namespace App\Models {
     /**
      * App\Models\ProfilWebsite
      *
+     * @property string|null $warna
      * @property string|null $gmap
      * @property string|null $youtube
      * @property string|null $facebook
@@ -1920,6 +1921,8 @@ namespace App\Models {
      * @property mixed $tahun_berdiri
      * @property string|null $hero
      * @property string|null $logo
+     * @property string|null $visi_misi
+     * @property string|null $deskripsi
      * @property string|null $foto_kepala
      * @property string|null $nama_kepala
      * @property string|null $nama
@@ -1932,6 +1935,8 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<ProfilWebsite>|ProfilWebsite whereNama($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProfilWebsite>|ProfilWebsite whereNamaKepala($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProfilWebsite>|ProfilWebsite whereFotoKepala($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<ProfilWebsite>|ProfilWebsite whereDeskripsi($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<ProfilWebsite>|ProfilWebsite whereVisiMisi($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProfilWebsite>|ProfilWebsite whereLogo($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProfilWebsite>|ProfilWebsite whereHero($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProfilWebsite>|ProfilWebsite whereTahunBerdiri($value)
@@ -1940,6 +1945,7 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<ProfilWebsite>|ProfilWebsite whereFacebook($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProfilWebsite>|ProfilWebsite whereYoutube($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProfilWebsite>|ProfilWebsite whereGmap($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<ProfilWebsite>|ProfilWebsite whereWarna($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProfilWebsite>|ProfilWebsite newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<ProfilWebsite>|ProfilWebsite newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<ProfilWebsite>|ProfilWebsite query()

@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('facebook')->nullable();
             $table->string('youtube')->nullable();
             $table->string('gmap')->nullable();
+            $table->string('warna')->nullable();
         });
     }
 

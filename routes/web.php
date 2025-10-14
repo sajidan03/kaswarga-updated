@@ -8,6 +8,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PemasukanKas;
 use App\Http\Controllers\PengeluaranKas;
 use App\Http\Controllers\PetugasController;
+use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WargaController;
 use App\Http\Controllers\WelcomeController;
@@ -28,6 +29,8 @@ Route::middleware(['auth', 'verified'])
         Route::get('member', [MemberController::class, 'index'])->name('memberView');
         Route::get('category', [CategoryController::class, 'index'])->name('categoryView');
         Route::get('kas/laporan', [LaporanKas::class, 'index'])->name('laporanKasView');
+        Route::get('profil', [ProfilController::class,'index'])->name('profilView');
+        Route::post('profil', [ProfilController::class,'profilSimpan'])->name('profilTambah');
         //
         Route::get('user/export', [UserController::class, 'export'])->name('userExport');
         //

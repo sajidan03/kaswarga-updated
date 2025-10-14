@@ -138,6 +138,8 @@ class DatabaseSeeder extends Seeder
             'nama'=> 'Kaswarga',
             'nama_kepala' => 'Muhammad Sajidan Rifansyah',
             'foto_kepala' => 'kepala.jpg',
+            'deskripsi' => 'Mengelola keuangan warga dengan mudah melalui website dan aplikasi',
+            'visi_misi' => 'Menjadikan masyarakat',
             'logo' => 'logo.jpg',
             'hero' => 'hero.jpg',
             'tahun_berdiri' => '2003',
@@ -146,6 +148,7 @@ class DatabaseSeeder extends Seeder
             'facebook' => 'https://instagram.com/sajidan03',
             'youtube' => 'https://instagram.com/sajidan03',
             'gmap' => 'https://maps.app.goo.gl/okJ2ckAM9ncc2Poq6',
+            'warna' => '#006D5B'
         ]);
     }
 }

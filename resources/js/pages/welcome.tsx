@@ -10,6 +10,7 @@ interface ProfilWebsite {
     foto_kepala: string
     logo: string
     hero: string
+    warna: string
 }
 interface WelcomeProps {
     profil: ProfilWebsite;
@@ -18,6 +19,10 @@ interface WelcomeProps {
 export default function Welcome() {
     const { auth, profil } = usePage<WelcomeProps>().props;
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+    // Warna tema dari database
+    const themeColor = profil.warna || '#0d9488'; // Fallback ke teal-500 jika tidak ada
+
     console.log(profil)
     return (
         <>
@@ -36,7 +41,10 @@ export default function Welcome() {
                     <nav className="flex items-center justify-between p-6 lg:px-8">
                         <div className="flex lg:flex-1">
                             <Link href="/" className="-m-1.5 p-1.5 flex items-center">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-500 text-white mr-2 overflow-hidden">
+                                <div
+                                    className="flex h-8 w-8 items-center justify-center rounded-full text-white mr-2 overflow-hidden"
+                                    style={{ backgroundColor: themeColor }}
+                                >
                                     <img
                                         src={`/storage/assets/${profil.logo}`}
                                         alt="Logo"
@@ -66,14 +74,17 @@ export default function Welcome() {
                             </button>
                         </div>
                         <div className="hidden lg:flex lg:gap-x-12">
+                            <a href="#beranda" className="text-sm/6 font-semibold text-white hover:text-teal-400">
+                                Beranda
+                            </a>
                             <a href="#fitur" className="text-sm/6 font-semibold text-white hover:text-teal-400">
                                 Fitur
                             </a>
                             <a href="#keunggulan" className="text-sm/6 font-semibold text-white hover:text-teal-400">
                                 Keunggulan
                             </a>
-                            <a href="#testimoni" className="text-sm/6 font-semibold text-white hover:text-teal-400">
-                                Testimoni
+                            <a href="#visimisi" className="text-sm/6 font-semibold text-white hover:text-teal-400">
+                                Visi & Misi
                             </a>
                             <a href="#tentang" className="text-sm/6 font-semibold text-white hover:text-teal-400">
                                 Tentang
@@ -105,7 +116,10 @@ export default function Welcome() {
                             <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-gray-900 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-white/10">
                                 <div className="flex items-center justify-between">
                                     <Link href="/" className="-m-1.5 p-1.5 flex items-center">
-                                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-500 text-white mr-2">
+                                        <div
+                                            className="flex h-8 w-8 items-center justify-center rounded-full text-white mr-2"
+                                            style={{ backgroundColor: themeColor }}
+                                        >
                                             <span className="text-lg font-bold">K</span>
                                         </div>
                                         <span className="text-xl font-bold text-white">aswarga</span>
@@ -136,6 +150,13 @@ export default function Welcome() {
                                                 className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5"
                                                 onClick={() => setMobileMenuOpen(false)}
                                             >
+                                                Beranda
+                                            </a>
+                                            <a
+                                                href="#fitur"
+                                                className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5"
+                                                onClick={() => setMobileMenuOpen(false)}
+                                            >
                                                 Fitur
                                             </a>
                                             <a
@@ -146,11 +167,11 @@ export default function Welcome() {
                                                 Keunggulan
                                             </a>
                                             <a
-                                                href="#testimoni"
+                                                href="#visimisi"
                                                 className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5"
                                                 onClick={() => setMobileMenuOpen(false)}
                                             >
-                                                Testimoni
+                                                Visi & Misi
                                             </a>
                                             <a
                                                 href="#tentang"
@@ -186,16 +207,15 @@ export default function Welcome() {
 
                 <div className="relative isolate px-6 pt-14 lg:px-8 min-h-screen flex items-center">
                     <div className="absolute inset-0 -z-10">
-                        <div
-                            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                            style={{
-                                backgroundImage: `url("/storage/assets/${profil.hero}")`
-                            }}
-                        />
-                        <div className="absolute inset-0 bg-black/60"></div>
-                    </div>
-
                     <div
+                        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                        style={{
+                            backgroundImage: `url("/storage/assets/${profil.hero}")`
+                        }}
+                    />
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+                </div>
+                                <div
                         aria-hidden="true"
                         className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
                     >
@@ -204,7 +224,10 @@ export default function Welcome() {
                                 clipPath:
                                     'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
                             }}
-                            className="relative left-[calc(50%-11rem)] aspect-1155/678 w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#80ffd4] to-[#fc80ff] opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
+                            className="relative left-[calc(50%-11rem)] aspect-1155/678 w-[36.125rem] -translate-x-1/2 rotate-[30deg] opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
+                            style={{
+                                background: `linear-gradient(to top right, ${themeColor}40, #fc80ff)`
+                            }}
                         />
                     </div>
 
@@ -212,7 +235,7 @@ export default function Welcome() {
                         <div className="hidden sm:mb-8 sm:flex sm:justify-center">
                             <div className="relative rounded-full px-3 py-1 text-sm/6 text-gray-200 ring-1 ring-white/20 hover:ring-white/30 backdrop-blur-sm">
                                 Platform terbaru untuk mengelola keuangan warga.{' '}
-                                <a href="#tentang" className="font-semibold text-teal-400">
+                                <a href="#tentang" className="font-semibold" style={{ color: themeColor }}>
                                     <span aria-hidden="true" className="absolute inset-0" />
                                     Pelajari lebih lanjut <span aria-hidden="true">&rarr;</span>
                                 </a>
@@ -245,7 +268,11 @@ export default function Welcome() {
                                 {auth.user ? (
                                     <Link
                                         href={login()}
-                                        className="rounded-md bg-teal-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-teal-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500 transition-colors duration-200"
+                                        className="rounded-md px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 transition-colors duration-200"
+                                        style={{
+                                            backgroundColor: themeColor,
+                                            focusVisible: { outlineColor: themeColor }
+                                        }}
                                     >
                                         Masuk ke Dashboard
                                     </Link>
@@ -253,13 +280,18 @@ export default function Welcome() {
                                     <>
                                         <Link
                                             href={login()}
-                                            className="rounded-md bg-teal-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-teal-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500 transition-colors duration-200"
+                                            className="rounded-md px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 transition-colors duration-200"
+                                            style={{
+                                                backgroundColor: themeColor,
+                                                focusVisible: { outlineColor: themeColor }
+                                            }}
                                         >
                                             Mulai Sekarang
                                         </Link>
                                         <Link
                                             href={login()}
-                                            className="text-sm/6 font-semibold text-white hover:text-teal-400 transition-colors duration-200"
+                                            className="text-sm/6 font-semibold text-white hover:opacity-80 transition-colors duration-200"
+                                            style={{ color: themeColor }}
                                         >
                                             Masuk ke Akun <span aria-hidden="true">→</span>
                                         </Link>
@@ -279,7 +311,10 @@ export default function Welcome() {
                                 clipPath:
                                     'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
                             }}
-                            className="relative left-[calc(50%+3rem)] aspect-1155/678 w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#80ffd4] to-[#fc80ff] opacity-20 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
+                            className="relative left-[calc(50%+3rem)] aspect-1155/678 w-[36.125rem] -translate-x-1/2 opacity-20 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
+                            style={{
+                                background: `linear-gradient(to top right, ${themeColor}40, #fc80ff)`
+                            }}
                         />
                     </div>
                 </div>
@@ -287,13 +322,13 @@ export default function Welcome() {
                 {/* Features Section */}
                 <motion.section
                 initial={{ y: 50, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}   // animasi aktif saat terlihat
-                viewport={{ once: true, amount: 0.2 }} // hanya sekali, muncul kalau 20% kelihatan
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 1, ease: "easeOut" }}
                 id="fitur" className="py-24 sm:py-32 bg-gray-900">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <div className="mx-auto max-w-2xl lg:text-center">
-                            <h2 className="text-base/7 font-semibold text-teal-400">Fitur Unggulan</h2>
+                            <h2 className="text-base/7 font-semibold" style={{ color: themeColor }}>Fitur Unggulan</h2>
                             <p className="mt-2 text-3xl font-semibold tracking-tight text-balance text-white sm:text-4xl">
                                 Semua yang Anda butuhkan untuk mengelola kas warga
                             </p>
@@ -305,7 +340,10 @@ export default function Welcome() {
                             <div className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
                                 {/* Feature 1 */}
                                 <div className="flex flex-col">
-                                    <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-lg bg-teal-500">
+                                    <div
+                                        className="mb-6 flex h-14 w-14 items-center justify-center rounded-lg text-white"
+                                        style={{ backgroundColor: themeColor }}
+                                    >
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             className="h-8 w-8 text-white"
@@ -327,7 +365,10 @@ export default function Welcome() {
 
                                 {/* Feature 2 */}
                                 <div className="flex flex-col">
-                                    <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-lg bg-teal-500">
+                                    <div
+                                        className="mb-6 flex h-14 w-14 items-center justify-center rounded-lg text-white"
+                                        style={{ backgroundColor: themeColor }}
+                                    >
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             className="h-8 w-8 text-white"
@@ -349,7 +390,10 @@ export default function Welcome() {
 
                                 {/* Feature 3 */}
                                 <div className="flex flex-col">
-                                    <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-lg bg-teal-500">
+                                    <div
+                                        className="mb-6 flex h-14 w-14 items-center justify-center rounded-lg text-white"
+                                        style={{ backgroundColor: themeColor }}
+                                    >
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             className="h-8 w-8 text-white"
@@ -374,10 +418,10 @@ export default function Welcome() {
                 </motion.section>
 
                 {/* Testimonial Section */}
-                <section id="testimoni" className="py-24 sm:py-32 bg-gray-900">
+                <section id="testimoni" className="py-24 sm:py-32 bg-teal-900">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <div className="mx-auto max-w-2xl lg:text-center">
-                            <h2 className="text-base/7 font-semibold text-teal-400">Testimoni</h2>
+                            <h2 className="text-base/7 font-semibold text-white">Testimoni</h2>
                             <p className="mt-2 text-3xl font-semibold tracking-tight text-balance text-white sm:text-4xl">
                                 Apa kata pengguna Kaswarga?
                             </p>
@@ -389,8 +433,8 @@ export default function Welcome() {
                                     Sekarang semua warga bisa melihat laporan keuangan secara real-time tanpa harus menunggu
                                     pertemuan rutin."
                                 </p>
-                                <p className="mt-6 text-base font-semibold text-teal-400">- Pak RT Cintawana</p>
-                                <p className="text-sm text-gray-400">Ketua RT 01, Cintawana</p>
+                                <p className="mt-6 text-base font-semibold text-white">- Kepala penanggung jawab</p>
+                                <p className="text-sm text-white">{profil.nama_kepala}</p>
                             </div>
                         </div>
                     </div>
@@ -407,17 +451,20 @@ export default function Welcome() {
                                 Bergabung dengan ratusan lingkungan yang telah mempercayakan pengelolaan keuangan mereka kepada Kaswarga.
                             </p>
                             <div className="mt-10 flex items-center justify-center gap-x-6">
-
-                                    <Link
-                                        href={login()}
-                                        className="rounded-md bg-teal-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-teal-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500"
-                                    >
-                                        Login
-                                    </Link>
-
+                                <Link
+                                    href={login()}
+                                    className="rounded-md px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 transition-colors duration-200"
+                                    style={{
+                                        backgroundColor: themeColor,
+                                        focusVisible: { outlineColor: themeColor }
+                                    }}
+                                >
+                                    Login
+                                </Link>
                                 <Link
                                     href="#tentang"
-                                    className="text-sm/6 font-semibold text-white hover:text-teal-400"
+                                    className="text-sm/6 font-semibold text-white hover:opacity-80 transition-colors duration-200"
+                                    style={{ color: themeColor }}
                                 >
                                     Pelajari lebih lanjut <span aria-hidden="true">→</span>
                                 </Link>
@@ -431,7 +478,10 @@ export default function Welcome() {
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <div className="flex flex-col items-center justify-center">
                             <div className="flex items-center justify-center mb-6">
-                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-teal-500 text-white mr-3">
+                                <div
+                                    className="flex h-10 w-10 items-center justify-center rounded-full text-white mr-3"
+                                    style={{ backgroundColor: themeColor }}
+                                >
                                     <span className="text-xl font-bold">K</span>
                                 </div>
                                 <span className="text-2xl font-bold text-white -ms-2">aswarga</span>
