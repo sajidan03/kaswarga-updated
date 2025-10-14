@@ -41,7 +41,6 @@ Route::middleware(['auth', 'verified'])
         Route::get('kas/pengeluaran', [PengeluaranKas::class, 'pengeluaranView'])->name('pengeluaranView');
         //
         Route::get('dashboardPayment', [PetugasController::class, 'paymentView'])->name('admin.payment');
-        Route::get('payment', [PetugasController::class, 'paymentAdmin'])->name('payment');
         Route::post('payment/{id}', [PetugasController::class, 'paymentDetailAdmin'])->name('petugasPaymentDetailPost');
         Route::get('payment/{id}', [PetugasController::class, 'paymentDetailAdmin'])->name('petugasPaymentDetailGet');
         //
@@ -82,10 +81,8 @@ Route::middleware(['auth', 'verified'])
     ->prefix('petugas')
     ->group(function () {
         Route::get('dashboard', [PetugasController::class, 'petugasView'])->name('petugas.dashboard');
-        Route::get('payment', [PetugasController::class, 'payment'])->name('petugas.payment');
         Route::post('payment/{id}', [PetugasController::class, 'paymentDetail'])->name('petugasPaymentDetailPost');
         Route::get('payment/{id}', [PetugasController::class, 'paymentDetail'])->name('petugasPaymentDetailGet');
-        Route::post('bayar/{member}', [PetugasController::class, 'bayar'])->name('officer.bayar');
     });
 
 require __DIR__ . '/settings.php';

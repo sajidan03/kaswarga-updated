@@ -76,6 +76,7 @@ public function petugasView()
     $profil = ProfilWebsite::all()->first();
     return Inertia::render('Petugas/payment', compact('belumBayar', 'sudahBayar', 'bulanIni', 'profil'));
 }
+////
 public function paymentView()
 {
     $bulanIni = Carbon::now()->format('Y-m');
@@ -177,8 +178,8 @@ public function paymentView()
         'profil' => $profil,
     ]);
 }
-    public function paymentDetail(Request $request, $id)
-{
+
+    public function paymentDetail(Request $request, $id){
     try {
         $id = Crypt::decryptString($id);
     } catch (DecryptException $e) {

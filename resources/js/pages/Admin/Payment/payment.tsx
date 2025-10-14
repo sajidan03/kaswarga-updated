@@ -32,7 +32,7 @@ interface PaymentPageProps {
 const breadcrumbs: BreadcrumbItem[] = [
   {
     title: 'Dashboard',
-    href: '/payment',
+    href: '/admin/payment',
   },
   {
     title: 'Daftar Pembayaran',

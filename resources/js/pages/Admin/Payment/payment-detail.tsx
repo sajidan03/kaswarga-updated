@@ -28,6 +28,7 @@ interface PaymentPageProps {
   payment: PaymentItem[];
   error?: string;
   encrypted_id?: string;
+  [key:string] : unknown
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
