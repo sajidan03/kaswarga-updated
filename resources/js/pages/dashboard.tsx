@@ -3,7 +3,7 @@ import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import {
-    
+
   Calendar,
   CreditCard,
   TrendingUp,
@@ -183,7 +183,6 @@ export default function Dashboard({ dashboardData }: DashboardProps) {
     ],
   };
 
-  // Chart options untuk aktivitas pengguna - DIPERBAIKI
   const activityChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -224,7 +223,6 @@ export default function Dashboard({ dashboardData }: DashboardProps) {
     },
   };
 
-  // Data untuk chart aktivitas pengguna - DIPERBAIKI
   const activityChartData = {
     labels: dashboardData.user_activity.map(item => item.day),
     datasets: [
@@ -240,7 +238,6 @@ export default function Dashboard({ dashboardData }: DashboardProps) {
     ],
   };
 
-  // Hitung statistik untuk card pendapatan
   const currentMonthRevenue = dashboardData.monthly_revenue.length > 0
     ? dashboardData.monthly_revenue[dashboardData.monthly_revenue.length - 1].revenue
     : 0;
@@ -253,7 +250,6 @@ export default function Dashboard({ dashboardData }: DashboardProps) {
     ? ((currentMonthRevenue - previousMonthRevenue) / previousMonthRevenue) * 100
     : 0;
 
-  // Pastikan data chart tersedia sebelum render
   if (!isClient) {
     return (
       <AppLayout breadcrumbs={breadcrumbs}>

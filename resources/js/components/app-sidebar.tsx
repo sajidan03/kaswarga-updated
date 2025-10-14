@@ -55,6 +55,11 @@ const adminNavItems: NavItem[] = [
         icon: Banknote,
     },
     {
+        title: 'Payments',
+        href: '/admin/dashboardPayment',
+        icon: LayoutGrid,
+    },
+    {
         title: 'Profil Website',
         href: '/admin/profil',
         icon: UserCheck2,

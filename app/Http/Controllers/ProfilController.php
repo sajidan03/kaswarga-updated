@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProfilWebsite;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -16,7 +17,9 @@ class ProfilController extends Controller
     }
      public function profilSimpan(Request $request)
     {
-        $request->validate([
+        Log::info('ProfilSimpan called', $request->all());
+
+        $validated = $request->validate([
             'nama' => 'required|string|max:255',
             'nama_kepala' => 'required|string|max:255',
             'foto_kepala' => 'nullable|image|mimes:jpeg,png,jpg,gif,heic',
@@ -30,29 +33,28 @@ class ProfilController extends Controller
             'facebook' => 'nullable|url|max:255',
             'youtube' => 'nullable|url|max:255',
             'gmap' => 'nullable|url|max:500',
-            'warna' => 'required|string|max:7',
+            'warna' => 'required|string',
         ]);
 
-        // if ($validate->fails()) {
-        //     return redirect()->back()
-        //         ->withErrors($validat)
-        //         ->withInput();
-        // }
+        $profil = ProfilWebsite::first();
 
-        $profil = ProfilWebsite::firstOrNew();
+        if (!$profil) {
+            $profil = new ProfilWebsite();
+        }
 
-        $profil->nama = $request->nama;
-        $profil->nama_kepala = $request->nama_kepala;
-        $profil->deskripsi = $request->deskripsi;
-        $profil->visi_misi = $request->visi_misi;
-        $profil->tahun_berdiri = $request->tahun_berdiri;
-        $profil->alamat = $request->alamat;
-        $profil->instagram = $request->instagram;
-        $profil->facebook = $request->facebook;
-        $profil->youtube = $request->youtube;
-        $profil->gmap = $request->gmap;
-        $profil->warna = $request->warna;
+        $profil->nama = $validated['nama'];
+        $profil->nama_kepala = $validated['nama_kepala'];
+        $profil->deskripsi = $validated['deskripsi'];
+        $profil->visi_misi = $validated['visi_misi'];
+        $profil->tahun_berdiri = $validated['tahun_berdiri'];
+        $profil->alamat = $validated['alamat'];
+        $profil->instagram = $validated['instagram'] ?? null;
+        $profil->facebook = $validated['facebook'] ?? null;
+        $profil->youtube = $validated['youtube'] ?? null;
+        $profil->gmap = $validated['gmap'] ?? null;
+        $profil->warna = $validated['warna'];
 
+        // Handle file uploads
         if ($request->hasFile('logo') && $request->file('logo')->isValid()) {
             if ($profil->logo && Storage::exists('assets/' . $profil->logo)) {
                 Storage::delete('assets/' . $profil->logo);

@@ -30,7 +30,7 @@ Route::middleware(['auth', 'verified'])
         Route::get('category', [CategoryController::class, 'index'])->name('categoryView');
         Route::get('kas/laporan', [LaporanKas::class, 'index'])->name('laporanKasView');
         Route::get('profil', [ProfilController::class,'index'])->name('profilView');
-        Route::post('profil', [ProfilController::class,'profilSimpan'])->name('profilTambah');
+        Route::post('profil', [ProfilController::class,'profilSimpan'])->name('profilSimpan');
         //
         Route::get('user/export', [UserController::class, 'export'])->name('userExport');
         //
@@ -39,6 +39,11 @@ Route::middleware(['auth', 'verified'])
         //
         Route::post('kas/pengeluaran', [PengeluaranKas::class, 'pengeluaranTambah'])->name('pengeluaranTambah');
         Route::get('kas/pengeluaran', [PengeluaranKas::class, 'pengeluaranView'])->name('pengeluaranView');
+        //
+        Route::get('dashboardPayment', [PetugasController::class, 'paymentView'])->name('admin.payment');
+        Route::get('payment', [PetugasController::class, 'paymentAdmin'])->name('payment');
+        Route::post('payment/{id}', [PetugasController::class, 'paymentDetailAdmin'])->name('petugasPaymentDetailPost');
+        Route::get('payment/{id}', [PetugasController::class, 'paymentDetailAdmin'])->name('petugasPaymentDetailGet');
         //
         Route::get('user/tambah', [UserController::class, 'tambahView'])->name('userTambahView');
         Route::post('user/tambah', [UserController::class, 'simpan'])->name('userTambah');
@@ -72,11 +77,6 @@ Route::middleware(['auth', 'verified'])
         Route::get('export/{id}', [WargaController::class, 'exportWarga'])->name('paymentExport');
         Route::get('dashboard', [WargaController::class, 'wargaView'])->name('wargaView');
     });
-
-
-    // Route::resource('members', MemberController::class);
-    // Route::resource('payments', PaymentController::class);
-
 
 Route::middleware(['auth', 'verified'])
     ->prefix('petugas')

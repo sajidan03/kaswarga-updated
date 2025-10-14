@@ -49,6 +49,11 @@ class PetugasController extends Controller
         $data['member'] = Member::get();
         return Inertia::render('Petugas/payment', $data);
     }
+     public function paymentAdmin(){
+        $data['profil'] = ProfilWebsite::all()->first();
+        $data['member'] = Member::get();
+        return Inertia::render('Admin/Payment/payment', $data);
+    }
 
 public function petugasView()
 {
@@ -70,6 +75,107 @@ public function petugasView()
     });
     $profil = ProfilWebsite::all()->first();
     return Inertia::render('Petugas/payment', compact('belumBayar', 'sudahBayar', 'bulanIni', 'profil'));
+}
+public function paymentView()
+{
+    $bulanIni = Carbon::now()->format('Y-m');
+
+    $allMembers = Member::with(['user', 'category'])->get();
+
+    $paidMemberIds = Payment::where('period', $bulanIni)->pluck('id_member')->toArray();
+
+    $belumBayar = $allMembers->whereNotIn('id', $paidMemberIds);
+    $sudahBayar = $allMembers->whereIn('id', $paidMemberIds);
+
+    $belumBayar->each(function($member) {
+        $member->encrypted_id = Crypt::encryptString($member->id_user);
+    });
+
+    $sudahBayar->each(function($member) {
+        $member->encrypted_id = Crypt::encryptString($member->id_user);
+    });
+    $profil = ProfilWebsite::all()->first();
+    return Inertia::render('Admin/Payment/payment', compact('belumBayar', 'sudahBayar', 'bulanIni', 'profil'));
+}
+    public function paymentDetailAdmin(Request $request, $id)
+{
+    try {
+        $id = Crypt::decryptString($id);
+    } catch (DecryptException $e) {
+        return back()->with('error', 'ID tidak valid atau sudah rusak!');
+    }
+
+    $member = Member::with(['user', 'category' ,'payment'])
+                  ->where('id_user', $id)
+                  ->first();
+
+    if (!$member) {
+        return back()->with('error', 'Data anggota tidak ditemukan!');
+    }
+
+    $payment = Payment::where('id_user', $member->id_user)->get();
+
+    $tanggalAwal = "01-08-2025";
+    $tanggalAkhir = date('d-m-Y');
+
+    $period = $member->category->period;
+    if ($period == 'mingguan') {
+        $jumlahPeriode = $this->hitungJumlahMinggu($tanggalAwal, $tanggalAkhir);
+    } elseif ($period == 'bulanan') {
+        $jumlahPeriode = $this->hitungJumlahBulan($tanggalAwal, $tanggalAkhir);
+    } else {
+        $jumlahPeriode = $this->hitungJumlahTahun($tanggalAwal, $tanggalAkhir);
+    }
+
+    if ($payment->count() >= $jumlahPeriode) {
+        $jumlah_tagihan = "Tidak Ada";
+        $nominal_tagihan = 0;
+    } else {
+        $jumlah_tagihan = ($jumlahPeriode - $payment->count()) . " kali pembayaran";
+        $nominal_tagihan = ($jumlahPeriode - $payment->count()) * $member->category->nominal;
+    }
+
+    if ($request->bayar) {
+        if ($payment->count() >= $jumlahPeriode) {
+            return back()->with('error', 'Semua tagihan sudah lunas, tidak perlu melakukan pembayaran lagi!');
+        }
+
+        $nominal_bayar = (int) $request->nominal;
+        $nominal_kategori = $member->category->nominal;
+
+        if ($nominal_bayar <= 0) {
+            return back()->with('error', 'Nominal pembayaran tidak boleh 0 atau negatif!');
+        }
+
+        if ($nominal_bayar % $nominal_kategori != 0) {
+            return back()->with('error', 'Nominal pembayaran harus kelipatan dari ' . number_format($nominal_kategori, 0, ',', '.'));
+        }
+
+        $jumlah_bayar = $nominal_bayar / $nominal_kategori;
+        $pembayaranKeTerakhir = Payment::where('id_user', $member->id_user)->count();
+
+        for ($i = 1; $i <= $jumlah_bayar; $i++) {
+            Payment::create([
+                'id_user'        => $member->id_user,
+                'nominal'        => $nominal_kategori,
+                'period'         => $member->category->period,
+                'id_petugas'     => Auth::user()->id,
+                'id_member'      => $member->id,
+                'total_bayar'    => $pembayaranKeTerakhir + $i,
+            ]);
+        }
+
+        return back()->with('success', 'Pembayaran berhasil disimpan!');
+    }
+    $profil = ProfilWebsite::all()->first();
+    return Inertia::render('Admin/Payment/payment', [
+        'jumlah_tagihan' => $jumlah_tagihan,
+        'nominal_tagihan' => $nominal_tagihan,
+        'payment' => $payment,
+        'member' => $member,
+        'encrypted_id' => Crypt::encryptString($member->id_user),
+        'profil' => $profil,
+    ]);
 }
     public function paymentDetail(Request $request, $id)
 {

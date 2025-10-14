@@ -13,11 +13,11 @@ interface ProfilWebsite {
   id?: number
   nama: string
   nama_kepala: string
-  foto_kepala: string
+  foto_kepala: string | File
   deskripsi: string
   visi_misi: string
-  logo: string
-  hero: string
+  logo: string | File
+  hero: string | File
   tahun_berdiri: string
   alamat: string
   instagram: string
@@ -31,22 +31,30 @@ interface PageProps {
   profil: ProfilWebsite
   flash: {
     success?: string
+    error?: string
   }
-  [key: string]: any
+  errors: unknown
+  [key: string]: unknown
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
-  { title: "Profil Website", href: "/admin/profil-website" },
+  { title: "Profil Website", href: "/admin/profil" },
 ]
 
 export default function ProfilWebsiteEdit() {
-  const { profil, flash } = usePage<PageProps>().props
-  const [formData, setFormData] = useState<ProfilWebsite>(profil)
+  const { profil, flash, errors } = usePage<PageProps>().props
+  const [formData, setFormData] = useState<ProfilWebsite>({
+    ...profil,
+    foto_kepala: profil.foto_kepala || '',
+    logo: profil.logo || '',
+    hero: profil.hero || '',
+  })
   const [previewImages, setPreviewImages] = useState({
     logo: profil.logo ? `/storage/assets/${profil.logo}` : '',
     hero: profil.hero ? `/storage/assets/${profil.hero}` : '',
     foto_kepala: profil.foto_kepala ? `/storage/assets/${profil.foto_kepala}` : ''
   })
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleChange = (field: keyof ProfilWebsite, value: string) => {
     setFormData(prev => ({
@@ -73,18 +81,94 @@ export default function ProfilWebsiteEdit() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    setIsLoading(true)
 
     const data = new FormData()
-    Object.keys(formData).forEach(key => {
-      const value = formData[key as keyof ProfilWebsite]
-      if (value instanceof File) {
-        data.append(key, value)
-      } else if (value !== null && value !== undefined) {
-        data.append(key, value.toString())
-      }
-    })
 
-    router.post('/admin/profil', data)
+    // Append semua field dengan type checking yang aman
+    Object.keys(formData).forEach((key) => {
+      const value = formData[key as keyof ProfilWebsite];
+
+      // Skip jika value null atau undefined
+      if (value === null || value === undefined) {
+        return;
+      }
+
+      // Handle File objects
+      if (value instanceof File) {
+        data.append(key, value);
+      }
+      // Handle string values
+      else if (typeof value === 'string') {
+        // Skip empty strings untuk field opsional
+        if (value === '' && ['instagram', 'facebook', 'youtube', 'gmap'].includes(key)) {
+          return;
+        }
+        data.append(key, value);
+      }
+      // Handle number (tahun_berdiri)
+      else if (typeof value === 'number') {
+        data.append(key, value.toString());
+      }
+    });
+
+    console.log('Submitting form data...');
+
+    router.post('/admin/profil', data, {
+      onSuccess: () => {
+        setIsLoading(false);
+      },
+      onError: (errors) => {
+        setIsLoading(false);
+        console.log('Errors:', errors);
+      },
+      onFinish: () => {
+        setIsLoading(false);
+      }
+    });
+  }
+
+  // Atau alternatif yang lebih sederhana:
+  const handleSubmitSimple = (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+
+    const data = new FormData()
+
+    // Append field secara manual satu per satu
+    data.append('nama', formData.nama)
+    data.append('nama_kepala', formData.nama_kepala)
+    data.append('deskripsi', formData.deskripsi)
+    data.append('visi_misi', formData.visi_misi)
+    data.append('tahun_berdiri', formData.tahun_berdiri)
+    data.append('alamat', formData.alamat)
+    data.append('warna', formData.warna)
+
+    // Append media sosial hanya jika ada value
+    if (formData.instagram) data.append('instagram', formData.instagram)
+    if (formData.facebook) data.append('facebook', formData.facebook)
+    if (formData.youtube) data.append('youtube', formData.youtube)
+    if (formData.gmap) data.append('gmap', formData.gmap)
+
+    // Append files jika ada
+    if (formData.logo instanceof File) data.append('logo', formData.logo)
+    if (formData.foto_kepala instanceof File) data.append('foto_kepala', formData.foto_kepala)
+    if (formData.hero instanceof File) data.append('hero', formData.hero)
+
+    console.log('Submitting form data...');
+
+    router.post('/admin/profil', data, {
+      onSuccess: () => {
+        setIsLoading(false);
+      },
+      onError: (errors) => {
+        setIsLoading(false);
+        console.log('Errors:', errors);
+      },
+      onFinish: () => {
+        setIsLoading(false);
+      }
+    });
   }
 
   return (
@@ -96,13 +180,32 @@ export default function ProfilWebsiteEdit() {
           <h2 className="text-2xl font-bold">Profil Website</h2>
         </div>
 
+        {/* Success Message */}
         {flash?.success && (
           <div className="p-3 rounded-md bg-green-100 text-green-700">
             {flash.success}
           </div>
         )}
 
-        <form onSubmit={handleSubmit}>
+        {/* Error Message */}
+        {flash?.error && (
+          <div className="p-3 rounded-md bg-red-100 text-red-700">
+            {flash.error}
+          </div>
+        )}
+
+        {/* Validation Errors */}
+        {Object.keys(errors).length > 0 && (
+          <div className="p-3 rounded-md bg-red-100 text-red-700">
+            <ul>
+              {Object.entries(errors).map(([key, value]) => (
+                <li key={key}>• {value as string}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmitSimple}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Informasi Dasar */}
             <Card>
@@ -121,6 +224,7 @@ export default function ProfilWebsiteEdit() {
                     onChange={(e) => handleChange('nama', e.target.value)}
                     placeholder="Contoh: Kaswarga RT 01"
                   />
+                  {errors.nama && <p className="text-red-500 text-sm">{errors.nama}</p>}
                 </div>
 
                 <div className="space-y-2">
@@ -131,6 +235,7 @@ export default function ProfilWebsiteEdit() {
                     onChange={(e) => handleChange('nama_kepala', e.target.value)}
                     placeholder="Nama ketua RT/RW"
                   />
+                  {errors.nama_kepala && <p className="text-red-500 text-sm">{errors.nama_kepala}</p>}
                 </div>
 
                 <div className="space-y-2">
@@ -142,19 +247,20 @@ export default function ProfilWebsiteEdit() {
                     onChange={(e) => handleChange('tahun_berdiri', e.target.value)}
                     placeholder="Tahun berdiri organisasi"
                   />
+                  {errors.tahun_berdiri && <p className="text-red-500 text-sm">{errors.tahun_berdiri}</p>}
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="alamat">Alamat</Label>
-                  <br />
                   <Textarea
                     id="alamat"
                     value={formData.alamat}
                     onChange={(e) => handleChange('alamat', e.target.value)}
                     placeholder="Alamat lengkap organisasi"
                     rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors duration-200"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors duration-200"
                   />
+                  {errors.alamat && <p className="text-red-500 text-sm">{errors.alamat}</p>}
                 </div>
               </CardContent>
             </Card>
@@ -276,28 +382,28 @@ export default function ProfilWebsiteEdit() {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="deskripsi">Deskripsi Organisasi</Label>
-                  <br />
                   <Textarea
                     id="deskripsi"
                     value={formData.deskripsi}
                     onChange={(e) => handleChange('deskripsi', e.target.value)}
                     placeholder="Deskripsi singkat tentang organisasi..."
                     rows={4}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors duration-200"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors duration-200"
                   />
+                  {errors.deskripsi && <p className="text-red-500 text-sm">{errors.deskripsi}</p>}
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="visi_misi">Visi & Misi</Label>
-                  <br />
                   <Textarea
                     id="visi_misi"
                     value={formData.visi_misi}
                     onChange={(e) => handleChange('visi_misi', e.target.value)}
                     placeholder="Visi dan misi organisasi..."
                     rows={6}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors duration-200"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors duration-200"
                   />
+                  {errors.visi_misi && <p className="text-red-500 text-sm">{errors.visi_misi}</p>}
                 </div>
               </CardContent>
             </Card>
@@ -361,11 +467,16 @@ export default function ProfilWebsiteEdit() {
               </CardContent>
             </Card>
           </div>
+
           {/* Submit Button */}
           <div className="mt-6 flex justify-end">
-            <Button type="submit" className="flex items-center gap-2">
+            <Button
+              type="submit"
+              className="flex items-center gap-2"
+              disabled={isLoading}
+            >
               <Save className="h-4 w-4" />
-              Simpan Perubahan
+              {isLoading ? 'Menyimpan...' : 'Simpan Perubahan'}
             </Button>
           </div>
         </form>
