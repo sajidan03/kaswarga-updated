@@ -65,12 +65,16 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
+
         $user = User::find($id);
         if (!$user) {
             return response()->json(['message' => 'User not found'], 404);
         }
 
-        return response()->json($user);
+        return response()->json([
+            "message" => "User retrieved successfully",
+            "data" => $user
+        ]);
     }
 
     /**
@@ -98,6 +102,11 @@ class UserController extends Controller
         }
 
         $user->update($data);
+
+        return response()->json([
+            'message' => 'User updated successfully',
+            'data' => $user,
+        ]);
     }
 
     /**
