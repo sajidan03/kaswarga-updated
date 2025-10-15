@@ -137,7 +137,7 @@ class DatabaseSeeder extends Seeder
         ProfilWebsite::create([
             'nama'=> 'Kaswarga',
             'nama_kepala' => 'Muhammad Sajidan Rifansyah',
-            'foto_kepala' => 'kepala.jpg',
+            'foto_kepala' => 'co.jpg',
             'deskripsi' => 'Mengelola keuangan warga dengan mudah melalui website dan aplikasi',
             'visi_misi' => 'Menjadikan masyarakat',
             'logo' => 'logo.jpg',
@@ -147,7 +147,7 @@ class DatabaseSeeder extends Seeder
             'instagram' => 'https://instagram.com/sajidan03',
             'facebook' => 'https://instagram.com/sajidan03',
             'youtube' => 'https://instagram.com/sajidan03',
-            'gmap' => 'https://maps.app.goo.gl/okJ2ckAM9ncc2Poq6',
+            'gmap' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3580.8227041352043!2d108.10326687500073!3d-7.3608588926482375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6f5523e04b2043%3A0x378ffcaddc4297c!2sSMK%20YPC%20Tasikmalaya!5e1!3m2!1sid!2sid!4v1760488666396!5m2!1sid!2sid',
             'warna' => '#006D5B'
         ]);
     }

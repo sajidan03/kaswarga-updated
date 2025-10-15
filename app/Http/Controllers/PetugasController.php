@@ -43,6 +43,7 @@ class PetugasController extends Controller
         $petugas->delete();
         return redirect()->route('petugasView')->with('success', 'User berhasil dihapus.');
     }
+
     //
     public function payment(){
         $data['profil'] = ProfilWebsite::all()->first();
@@ -89,20 +90,21 @@ public function paymentView()
     $sudahBayar = $allMembers->whereIn('id', $paidMemberIds);
 
     $belumBayar->each(function($member) {
-        $member->encrypted_id = Crypt::encryptString($member->id_user);
+        $member->encrypted_id = Crypt::encrypt($member->id_user);
     });
 
     $sudahBayar->each(function($member) {
-        $member->encrypted_id = Crypt::encryptString($member->id_user);
+        $member->encrypted_id = Crypt::encrypt($member->id_user);
     });
     $profil = ProfilWebsite::all()->first();
     return Inertia::render('Admin/Payment/payment', compact('belumBayar', 'sudahBayar', 'bulanIni', 'profil'));
 }
-    public function paymentDetailAdmin(Request $request, $id)
-{
+
+    public function paymentDetailAdmin(Request $request, $id){
     try {
-        $id = Crypt::decryptString($id);
+        $id = Crypt::decrypt($id);
     } catch (DecryptException $e) {
+        dd($e->getMessage());
         return back()->with('error', 'ID tidak valid atau sudah rusak!');
     }
 
@@ -169,12 +171,12 @@ public function paymentView()
         return back()->with('success', 'Pembayaran berhasil disimpan!');
     }
     $profil = ProfilWebsite::all()->first();
-    return Inertia::render('Admin/Payment/payment', [
+    return Inertia::render('Admin/Payment/payment-detail', [
         'jumlah_tagihan' => $jumlah_tagihan,
         'nominal_tagihan' => $nominal_tagihan,
         'payment' => $payment,
         'member' => $member,
-        'encrypted_id' => Crypt::encryptString($member->id_user),
+        'encrypted_id' => Crypt::encrypt($member->id_user),
         'profil' => $profil,
     ]);
 }

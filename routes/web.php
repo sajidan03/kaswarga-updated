@@ -41,8 +41,8 @@ Route::middleware(['auth', 'verified'])
         Route::get('kas/pengeluaran', [PengeluaranKas::class, 'pengeluaranView'])->name('pengeluaranView');
         //
         Route::get('dashboardPayment', [PetugasController::class, 'paymentView'])->name('admin.payment');
-        Route::post('payment/{id}', [PetugasController::class, 'paymentDetailAdmin'])->name('petugasPaymentDetailPost');
         Route::get('payment/{id}', [PetugasController::class, 'paymentDetailAdmin'])->name('petugasPaymentDetailGet');
+        Route::post('payment/{id}', [PetugasController::class, 'paymentDetailAdmin'])->name('petugasPaymentDetailPost');
         //
         Route::get('user/tambah', [UserController::class, 'tambahView'])->name('userTambahView');
         Route::post('user/tambah', [UserController::class, 'simpan'])->name('userTambah');
