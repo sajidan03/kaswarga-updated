@@ -22,8 +22,15 @@ class AuthController extends Controller
             return response()->json([
                 'message' => 'Login berhasil',
                 'token' => $token,
-                'user' => $user,
+                'user' => [
+                    'id' => $user->id,
+                    'username' => $user->username,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'role' => $user->role
+            ],
             ]);
+
         }
 
         return response()->json(['message' => 'Invalid credentials'], 401);

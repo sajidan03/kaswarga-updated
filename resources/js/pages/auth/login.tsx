@@ -1,13 +1,8 @@
 import AuthenticatedSessionController from '@/actions/App/Http/Controllers/Auth/AuthenticatedSessionController';
 import InputError from '@/components/input-error';
-import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import AuthLayout from '@/layouts/auth-layout';
-import { request } from '@/routes/password';
-import { Form, Head, usePage } from '@inertiajs/react';
+import { Form, usePage } from '@inertiajs/react';
 import { LoaderCircle, LogIn, Eye, EyeOff, User, Lock } from 'lucide-react';
 import { useState } from 'react';
 
@@ -16,7 +11,7 @@ interface LoginProps {
     canResetPassword: boolean;
 }
 
-export default function Login({ status, canResetPassword }: LoginProps) {
+export default function Login({ status }: LoginProps) {
     const [showPassword, setShowPassword] = useState(false);
     const [isFocused, setIsFocused] = useState({
         username: false,
@@ -66,7 +61,8 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                         >
                             {({ processing, errors }) => (
                                 <>
-                                    <div className="space-y-6">
+                                <p className='text-[#066855] font-bold'>Username</p>
+                                    <div className="space-y-6 -mt-3">
                                         {/* Username Field */}
                                         <div className="space-y-2">
                                             <div className="relative">
@@ -92,7 +88,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                                         autoFocus
                                                         tabIndex={1}
                                                         autoComplete="username"
-                                                        placeholder="Username"
+                                                        // placeholder="Username"
                                                         className="border-0 shadow-none focus-visible:ring-0 pl-3 pr-4 py-3 text-base placeholder-gray-400 bg-transparent"
                                                         onFocus={() => handleFocus('username')}
                                                         onBlur={() => handleBlur('username')}
@@ -101,9 +97,9 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                                 <InputError message={errors.email} className="mt-2" />
                                             </div>
                                         </div>
-
+                                        <p className='text-[#066855] font-bold'>Password</p>
                                         {/* Password Field */}
-                                        <div className="space-y-2">
+                                        <div className="space-y-2 -mt-3">
                                             <div className="relative">
                                                 <div className={`flex items-center border-b-2 transition-all duration-300 ${
                                                     isFocused.password
@@ -126,7 +122,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                                         required
                                                         tabIndex={2}
                                                         autoComplete="current-password"
-                                                        placeholder="Password"
+                                                        // placeholder="Password"
                                                         className="border-0 shadow-none focus-visible:ring-0 pl-3 pr-12 py-3 text-base placeholder-gray-400 bg-transparent"
                                                         onFocus={() => handleFocus('password')}
                                                         onBlur={() => handleBlur('password')}
@@ -164,7 +160,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                         {/* Login Button */}
                                         <Button
                                             type="submit"
-                                            className="w-full bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white py-3 rounded-xl font-semibold text-base shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
+                                            className="w-full bg-[#066855] hover:bg-[#055544] text-white py-3 rounded-xl font-semibold text-base shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
                                             tabIndex={4}
                                             disabled={processing}
                                         >
