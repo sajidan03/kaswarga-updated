@@ -45,7 +45,7 @@ export default function WargaIndex({ warga }: WargaIndexProps) {
   }, [warga, search])
 
   const handleDelete = (id: number) => {
-    if (confirm("Hapus data ini?")) {
+    if (confirm("Apakah Anda yakin ingin menghapus warga ini?")) {
       router.delete(`/admin/warga/hapus/${id}`)
     }
   }
@@ -54,102 +54,66 @@ export default function WargaIndex({ warga }: WargaIndexProps) {
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Daftar Warga" />
 
-      <div className="w-full min-h-screen p-6 bg-gray-50">
-        <div className="max-w-7xl mx-auto space-y-6">
-          {/* Header */}
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                <Users className="w-7 h-7 text-green-600" />
-                Daftar Warga
-              </h1>
-              <p className="text-gray-500 text-sm mt-1">
-                Kelola data warga yang terdaftar di sistem.
-              </p>
-            </div>
+      <div className="p-6">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-bold">Daftar Warga</h1>
 
-            {/* Search */}
-            <div className="flex items-center gap-2 w-full md:w-80">
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm focus:ring focus:ring-green-200 focus:border-green-500"
-                placeholder="Cari nama atau alamat..."
-              />
-              <Button type="button" className="bg-green-600 hover:bg-green-700">
-                <Search className="w-4 h-4" />
-              </Button>
-            </div>
+          {/* Search */}
+          <div className="flex items-center gap-2 w-80">
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm focus:ring focus:ring-green-200 focus:border-green-500"
+              placeholder="Cari nama atau alamat..."
+            />
+            <Button type="button" className="bg-green-600 hover:bg-green-700">
+              <Search className="w-4 h-4" />
+            </Button>
           </div>
+        </div>
 
-          {/* Table */}
-          <Card className="shadow-md border border-gray-200">
-            <CardHeader className="border-b pb-3">
-              <CardTitle className="text-lg font-semibold text-gray-700">
-                Tabel Warga
-              </CardTitle>
-            </CardHeader>
-
-            <CardContent className="p-6">
-              <Table className="w-full">
-                <TableHeader>
-                  <TableRow className="bg-gray-50">
-                    <TableHead className="w-16 text-center">No</TableHead>
-                    <TableHead>Nama</TableHead>
-                    <TableHead>Alamat</TableHead>
-                    <TableHead className="text-center w-36">Aksi</TableHead>
-                  </TableRow>
-                </TableHeader>
-
-                <TableBody>
-                  {filtered.length > 0 ? (
-                    filtered.map((item, index) => (
-                      <TableRow
-                        key={item.id}
-                        className={`hover:bg-gray-100 ${
-                          index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                        }`}
+        {/* Table */}
+        <div className="overflow-x-auto bg-white shadow-md rounded-lg">
+          <table className="min-w-full table-auto border-collapse">
+            <thead className="bg-gray-100 text-gray-700 text-sm">
+              <tr>
+                <th className="px-4 py-3 text-left">No</th>
+                <th className="px-4 py-3 text-left">Nama</th>
+                <th className="px-4 py-3 text-left">Alamat</th>
+                <th className="px-4 py-3 text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody className="text-gray-600">
+              {filtered.length > 0 ? (
+                filtered.map((item, index) => (
+                  <tr key={item.id} className="border-b hover:bg-gray-50">
+                    <td className="px-4 py-3">{index + 1}</td>
+                    <td className="px-4 py-3">{item.name}</td>
+                    <td className="px-4 py-3">{item.address ?? "-"}</td>
+                    <td className="px-4 py-3 flex items-center justify-center gap-2">
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => handleDelete(item.id)}
+                        className="flex items-center gap-1 px-3 py-1 bg-red-600 text-white text-sm rounded-md hover:bg-red-700"
                       >
-                        <TableCell className="text-center py-4 px-3">
-                          {index + 1}
-                        </TableCell>
-                        <TableCell className="font-medium py-4 px-3">
-                          {item.name}
-                        </TableCell>
-                        <TableCell className="py-4 px-3">
-                          {item.address ?? "-"}
-                        </TableCell>
-                        <TableCell className="text-center py-4 px-3">
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={() => handleDelete(item.id)}
-                            className="flex items-center gap-1"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                            Hapus
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell
-                        colSpan={4}
-                        className="text-center py-12 text-gray-500 italic"
-                      >
-                        <div className="flex flex-col items-center gap-2">
-                          <Users className="w-10 h-10 text-gray-400" />
-                          Tidak ada data warga ditemukan.
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
+                        <Trash2 className="w-4 h-4" />
+                        Hapus
+                      </Button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={4} className="px-4 py-6 text-center text-gray-500">
+                    Tidak ada data
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </AppLayout>

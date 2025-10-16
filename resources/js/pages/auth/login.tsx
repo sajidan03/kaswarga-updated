@@ -89,7 +89,7 @@ export default function Login({ status }: LoginProps) {
                                                         tabIndex={1}
                                                         autoComplete="username"
                                                         // placeholder="Username"
-                                                        className="border-0 shadow-none focus-visible:ring-0 pl-3 pr-4 py-3 text-base placeholder-gray-400 bg-transparent"
+                                                        className="border-0 shadow-none focus-visible:ring-0 pl-3 pr-4 py-3 text-base placeholder-gray-400 bg-transparent text-black"
                                                         onFocus={() => handleFocus('username')}
                                                         onBlur={() => handleBlur('username')}
                                                     />
@@ -123,7 +123,7 @@ export default function Login({ status }: LoginProps) {
                                                         tabIndex={2}
                                                         autoComplete="current-password"
                                                         // placeholder="Password"
-                                                        className="border-0 shadow-none focus-visible:ring-0 pl-3 pr-12 py-3 text-base placeholder-gray-400 bg-transparent"
+                                                        className="border-0 shadow-none focus-visible:ring-0 pl-3 pr-12 py-3 text-base placeholder-gray-400 bg-transparent text-black"
                                                         onFocus={() => handleFocus('password')}
                                                         onBlur={() => handleBlur('password')}
                                                     />

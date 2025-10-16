@@ -9,7 +9,6 @@ import {
   UserCog,
   DollarSign,
   Folder,
-  TrendingUp,
   Activity,
   Calendar,
   CreditCard
@@ -138,7 +137,7 @@ export default function Dashboard({ dashboardData }: DashboardProps) {
             <div className="flex items-center justify-between">
               <div className="flex flex-col gap-1">
                 <h3 className="text-sm font-medium text-muted-foreground">Total User</h3>
-                <p className="text-2xl font-bold">{formatNumber(dashboardData.total_users)}</p>
+                <p className="text-2xl font-bold text-black">{formatNumber(dashboardData.total_users)}</p>
               </div>
               <div className="rounded-full bg-blue-100 p-3">
                 <Users className="h-5 w-5 text-blue-600" />
@@ -154,7 +153,7 @@ export default function Dashboard({ dashboardData }: DashboardProps) {
             <div className="flex items-center justify-between">
               <div className="flex flex-col gap-1">
                 <h3 className="text-sm font-medium text-muted-foreground">Member Aktif</h3>
-                <p className="text-2xl font-bold">{formatNumber(dashboardData.total_members)}</p>
+                <p className="text-2xl font-bold text-black">{formatNumber(dashboardData.total_members)}</p>
               </div>
               <div className="rounded-full bg-green-100 p-3">
                 <UserCheck className="h-5 w-5 text-green-600" />
@@ -170,7 +169,7 @@ export default function Dashboard({ dashboardData }: DashboardProps) {
             <div className="flex items-center justify-between">
               <div className="flex flex-col gap-1">
                 <h3 className="text-sm font-medium text-muted-foreground">Total Warga</h3>
-                <p className="text-2xl font-bold">{formatNumber(dashboardData.total_residents)}</p>
+                <p className="text-2xl font-bold text-black">{formatNumber(dashboardData.total_residents)}</p>
               </div>
               <div className="rounded-full bg-purple-100 p-3">
                 <Users className="h-5 w-5 text-purple-600" />
@@ -186,7 +185,7 @@ export default function Dashboard({ dashboardData }: DashboardProps) {
             <div className="flex items-center justify-between">
               <div className="flex flex-col gap-1">
                 <h3 className="text-sm font-medium text-muted-foreground">Petugas</h3>
-                <p className="text-2xl font-bold">{formatNumber(dashboardData.total_officers)}</p>
+                <p className="text-2xl font-bold text-black">{formatNumber(dashboardData.total_officers)}</p>
               </div>
               <div className="rounded-full bg-orange-100 p-3">
                 <UserCog className="h-5 w-5 text-orange-600" />
@@ -202,7 +201,7 @@ export default function Dashboard({ dashboardData }: DashboardProps) {
             <div className="flex items-center justify-between">
               <div className="flex flex-col gap-1">
                 <h3 className="text-sm font-medium text-muted-foreground">Total Pendapatan</h3>
-                <p className="text-2xl font-bold">{formatCurrency(dashboardData.total_revenue)}</p>
+                <p className="text-2xl font-bold text-black">{formatCurrency(dashboardData.total_revenue)}</p>
               </div>
               <div className="rounded-full bg-teal-100 p-3">
                 <DollarSign className="h-5 w-5 text-teal-600" />
@@ -217,8 +216,8 @@ export default function Dashboard({ dashboardData }: DashboardProps) {
           <div className="rounded-lg border bg-white p-6 shadow-sm">
             <div className="flex items-center justify-between">
               <div className="flex flex-col gap-1">
-                <h3 className="text-sm font-medium text-muted-foreground">Jenis Iuran</h3>
-                <p className="text-2xl font-bold">{formatNumber(dashboardData.total_categories)}</p>
+                <h3 className="text-sm font-medium text-muted-foreground ">Jenis Iuran</h3>
+                <p className="text-2xl font-bold text-black">{formatNumber(dashboardData.total_categories)}</p>
               </div>
               <div className="rounded-full bg-pink-100 p-3">
                 <Folder className="h-5 w-5 text-pink-600" />
@@ -311,7 +310,7 @@ export default function Dashboard({ dashboardData }: DashboardProps) {
                       <CreditCard className="h-4 w-4 text-green-600" />
                     </div>
                     <div>
-                      <p className="font-medium">{payment.user_name}</p>
+                      <p className="font-medium text-black">{payment.user_name}</p>
                       <p className="text-sm text-muted-foreground">{payment.period}</p>
                     </div>
                   </div>

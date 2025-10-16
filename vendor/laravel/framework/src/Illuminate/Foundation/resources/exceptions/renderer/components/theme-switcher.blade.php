@@ -36,21 +36,21 @@
     x-data="{
         menu: false,
         theme: localStorage.theme,
-        darkMode() {
+        {{-- darkMode() {
             this.theme = 'dark'
             localStorage.theme = 'dark'
             setDarkClass()
-        },
+        }, --}}
         lightMode() {
             this.theme = 'light'
             localStorage.theme = 'light'
             setDarkClass()
         },
-        systemMode() {
+        {{-- systemMode() {
             this.theme = undefined
             localStorage.removeItem('theme')
             setDarkClass()
-        },
+        }, --}}
     }"
     @click.outside="menu = false"
 >

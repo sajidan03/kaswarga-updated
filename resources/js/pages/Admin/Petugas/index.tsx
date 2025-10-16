@@ -1,16 +1,7 @@
 import { Head, usePage, router } from "@inertiajs/react"
 import AppLayout from "@/layouts/app-layout"
 import { type BreadcrumbItem } from "@/types"
-import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
 import { Plus, Trash2 } from "lucide-react"
 
 interface Officer {
@@ -27,7 +18,7 @@ interface PageProps {
   flash: {
     success?: string
   }
-  [key: string]: any
+  [key: string]: unknown
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -38,7 +29,7 @@ export default function PetugasIndex() {
   const { officers, flash } = usePage<PageProps>().props
 
   const handleDelete = (id: number) => {
-    if (confirm("Yakin ingin menghapus officer ini?")) {
+    if (confirm("Apakah Anda yakin ingin menghapus petugas ini?")) {
       router.delete(`/admin/petugas/hapus/${id}`)
     }
   }
@@ -47,71 +38,69 @@ export default function PetugasIndex() {
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Petugas" />
 
-      <div className="p-6 flex flex-col gap-6">
-        <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold">Data Petugas</h2>
+      <div className="p-6">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-bold">Daftar Petugas</h1>
+
+          {/* Tombol Tambah Petugas */}
           <Button
             onClick={() => router.visit("/admin/petugas/tambah")}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
           >
             <Plus className="h-4 w-4" />
             Tambah Petugas
           </Button>
         </div>
 
+        {/* Flash Message */}
         {flash?.success && (
-          <div className="p-3 rounded-md bg-green-100 text-green-700">
+          <div className="mb-6 p-3 rounded-md bg-green-100 text-green-700">
             {flash.success}
           </div>
         )}
 
-        <Card>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>ID</TableHead>
-                  <TableHead>Nama</TableHead>
-                  <TableHead>Username</TableHead>
-                  <TableHead>Role Sebelum</TableHead>
-                  <TableHead className="text-center">Aksi</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {officers.length > 0 ? (
-                  officers.map((officer) => (
-                    <TableRow key={officer.id}>
-                      <TableCell>{officer.id}</TableCell>
-                      <TableCell>{officer.user?.name ?? "-"}</TableCell>
-                      <TableCell>{officer.user?.username ?? "-"}</TableCell>
-                      <TableCell>{officer.previous_role ?? "-"}</TableCell>
-                      <TableCell className="text-center">
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          onClick={() => handleDelete(officer.id)}
-                          className="flex items-center gap-1"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                          Hapus
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={5}
-                      className="text-center text-muted-foreground"
-                    >
-                      Belum ada petugas.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+        {/* Table */}
+        <div className="overflow-x-auto bg-white shadow-md rounded-lg">
+          <table className="min-w-full table-auto border-collapse">
+            <thead className="bg-gray-100 text-gray-700 text-sm">
+              <tr>
+                <th className="px-4 py-3 text-left">No</th>
+                <th className="px-4 py-3 text-left">Nama</th>
+                <th className="px-4 py-3 text-left">Username</th>
+                <th className="px-4 py-3 text-left">Role Sebelum</th>
+                <th className="px-4 py-3 text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody className="text-gray-600">
+              {officers.length > 0 ? (
+                officers.map((officer, index) => (
+                  <tr key={officer.id} className="border-b hover:bg-gray-50">
+                    <td className="px-4 py-3">{index + 1}</td>
+                    <td className="px-4 py-3">{officer.user?.name ?? "-"}</td>
+                    <td className="px-4 py-3">{officer.user?.username ?? "-"}</td>
+                    <td className="px-4 py-3">{officer.previous_role ?? "-"}</td>
+                    <td className="px-4 py-3 flex items-center justify-center gap-2">
+                      <button
+                        onClick={() => handleDelete(officer.id)}
+                        className="px-3 py-1 bg-red-600 text-white text-sm rounded-md hover:bg-red-700 flex items-center gap-1"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        Hapus
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={5} className="px-4 py-6 text-center text-gray-500">
+                    Tidak ada data
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </AppLayout>
   )
