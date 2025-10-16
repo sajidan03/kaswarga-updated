@@ -81,7 +81,7 @@ export default function Pemasukan() {
 
         {/* Form Section */}
         <Card className="w-full shadow-lg border-0">
-          <CardHeader className="bg-gradient-to-r from-green-50 to-teal-50">
+          {/* <CardHeader className="bg-gradient-to-r from-green-50 to-teal-50">
             <CardTitle className="flex items-center gap-2">
               <Plus className="w-5 h-5" />
               Tambah pemasukan baru
@@ -89,7 +89,7 @@ export default function Pemasukan() {
             <CardDescription>
               Lengkapi form berikut untuk menambahkan data pemasukan kas
             </CardDescription>
-          </CardHeader>
+          </CardHeader> */}
           <CardContent className="p-4 md:p-6">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

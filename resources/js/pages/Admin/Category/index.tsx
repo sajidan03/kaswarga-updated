@@ -1,22 +1,8 @@
 import AppLayout from "@/layouts/app-layout"
 import { Head, Link, useForm } from "@inertiajs/react"
 import { BreadcrumbItem } from "@/types"
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-} from "@/components/ui/card"
-import {
-  Table,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-} from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { Edit, Trash2, Plus, Tag } from "lucide-react"
+import { Edit, Trash2, Plus } from "lucide-react"
 
 type Category = {
   id: number
@@ -50,20 +36,14 @@ export default function CategoryIndex({ categories, flash }: CategoryIndexProps)
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Daftar Kategori Iuran" />
 
-      <div className="w-full space-y-6 p-6">
+      <div className="p-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-              <Tag className="w-7 h-7 text-blue-600" />
-              Daftar Kategori Iuran
-            </h1>
-            <p className="text-gray-500 text-sm">
-              Kelola kategori iuran warga untuk pembayaran rutin.
-            </p>
-          </div>
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-bold">Daftar Kategori Iuran</h1>
+
+          {/* Tombol Tambah Kategori */}
           <Link href="/admin/category/tambah">
-            <Button className="bg-blue-600 hover:bg-blue-700 flex items-center gap-2">
+            <Button className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
               <Plus className="w-4 h-4" />
               Tambah Kategori
             </Button>
@@ -72,88 +52,69 @@ export default function CategoryIndex({ categories, flash }: CategoryIndexProps)
 
         {/* Flash messages */}
         {flash?.success && (
-          <div className="p-3 rounded bg-green-100 text-green-700 text-sm shadow-sm">
+          <div className="mb-6 p-3 rounded-md bg-green-100 text-green-700">
             {flash.success}
           </div>
         )}
-        
+
         {flash?.error && (
-          <div className="p-3 rounded bg-red-100 text-red-700 text-sm shadow-sm">
+          <div className="mb-6 p-3 rounded-md bg-red-100 text-red-700">
             {flash.error}
           </div>
         )}
 
-        {/* Card Table */}
-        <Card className="shadow-md border border-gray-200">
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold text-gray-700">
-              Tabel Kategori Iuran
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>No</TableHead>
-                  <TableHead>Nama Kategori</TableHead>
-                  <TableHead>Periode Pembayaran</TableHead>
-                  <TableHead>Nominal Pembayaran</TableHead>
-                  <TableHead className="text-center">Aksi</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {categories.length > 0 ? (
-                  categories.map((category, index) => (
-                    <TableRow key={category.id}>
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell className="font-medium">
-                        {category.name || 'N/A'}
-                      </TableCell>
-                      <TableCell className="capitalize">
-                        {category.period || 'N/A'}
-                      </TableCell>
-                      <TableCell>
-                        {category.nominal 
-                          ? `Rp ${new Intl.NumberFormat('id-ID').format(category.nominal)}`
-                          : 'N/A'
-                        }
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex justify-center gap-2">
-                          <Link href={`/admin/category/edit/${category.encrypted_id}`}>
-                            <Button 
-                              variant="outline" 
-                              size="sm"
-                              className="flex items-center gap-1"
-                            >
-                              <Edit className="w-4 h-4" />
-                              Edit
-                            </Button>
-                          </Link>
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={() => handleDelete(category.encrypted_id)}
-                            className="flex items-center gap-1"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                            Hapus
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={5} className="text-center py-8 text-gray-500">
-                      Tidak ada data kategori
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+        {/* Table */}
+        <div className="overflow-x-auto bg-white shadow-md rounded-lg">
+          <table className="min-w-full table-auto border-collapse">
+            <thead className="bg-gray-100 text-gray-700 text-sm">
+              <tr>
+                <th className="px-4 py-3 text-left">No</th>
+                <th className="px-4 py-3 text-left">Nama Kategori</th>
+                <th className="px-4 py-3 text-left">Periode Pembayaran</th>
+                <th className="px-4 py-3 text-left">Nominal Pembayaran</th>
+                <th className="px-4 py-3 text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody className="text-gray-600">
+              {categories.length > 0 ? (
+                categories.map((category, index) => (
+                  <tr key={category.id} className="border-b hover:bg-gray-50">
+                    <td className="px-4 py-3">{index + 1}</td>
+                    <td className="px-4 py-3">{category.name || 'N/A'}</td>
+                    <td className="px-4 py-3 capitalize">{category.period || 'N/A'}</td>
+                    <td className="px-4 py-3">
+                      {category.nominal
+                        ? `Rp ${new Intl.NumberFormat('id-ID').format(category.nominal)}`
+                        : 'N/A'
+                      }
+                    </td>
+                    <td className="px-4 py-3 flex items-center justify-center gap-2">
+                      <Link href={`/admin/category/edit/${category.encrypted_id}`}>
+                        <button className="px-3 py-1 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 flex items-center gap-1">
+                          <Edit className="w-4 h-4" />
+                          Edit
+                        </button>
+                      </Link>
+                      <button
+                        onClick={() => handleDelete(category.encrypted_id)}
+                        className="px-3 py-1 bg-red-600 text-white text-sm rounded-md hover:bg-red-700 flex items-center gap-1"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Hapus
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={5} className="px-4 py-6 text-center text-gray-500">
+                    Tidak ada data
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </AppLayout>
   )
