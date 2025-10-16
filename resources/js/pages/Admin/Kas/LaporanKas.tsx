@@ -13,14 +13,6 @@ import {
   SelectItem,
 } from "@/components/ui/select"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
   ArrowLeft,
   Download,
   Filter,
@@ -30,7 +22,9 @@ import {
   Calendar,
   DollarSign,
   TrendingUp,
-  TrendingDown
+  TrendingDown,
+  Eye,
+  Minus
 } from "lucide-react"
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -242,109 +236,166 @@ export default function LaporanKas() {
           </CardContent>
         </Card>
 
-        {/* Table Section */}
+        {/* Table Section - Responsive */}
         <Card className="w-full shadow-lg border-0">
           <CardHeader className="bg-gradient-to-r from-gray-50 to-blue-50">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
                 <CardTitle>Daftar Transaksi Kas</CardTitle>
                 <CardDescription>
                   {props.transaksi.data?.length || 0} transaksi ditemukan
                 </CardDescription>
               </div>
-              <div className="flex gap-2">
-                <Button variant="outline" className="flex items-center gap-2">
+              <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+                <Button variant="outline" className="flex items-center gap-2 flex-1 sm:flex-none">
                   <Download className="w-4 h-4" />
-                  Export
+                  <span className="hidden sm:inline">Export</span>
                 </Button>
-                <Link href="/admin/kas/pemasukan">
-                  <Button className="bg-green-600 hover:bg-green-700 flex items-center gap-2">
+                <Link href="/admin/kas/pemasukan" className="flex-1 sm:flex-none">
+                  <Button className="bg-green-600 hover:bg-green-700 flex items-center gap-2 w-full">
                     <Plus className="w-4 h-4" />
-                    Pemasukan
+                    <span className="hidden sm:inline">Pemasukan</span>
                   </Button>
                 </Link>
-                <Link href="/admin/kas/pengeluaran">
-                  <Button className="bg-red-600 hover:bg-red-700 flex items-center gap-2">
-                    <Plus className="w-4 h-4" />
-                    Pengeluaran
+                <Link href="/admin/kas/pengeluaran" className="flex-1 sm:flex-none">
+                  <Button className="bg-red-600 hover:bg-red-700 flex items-center gap-2 w-full">
+                    <Minus className="w-4 h-4" />
+                    <span className="hidden sm:inline">Pengeluaran</span>
                   </Button>
                 </Link>
               </div>
             </div>
           </CardHeader>
           <CardContent className="p-0">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Tanggal</TableHead>
-                  <TableHead>Jenis</TableHead>
-                  <TableHead>Sumber</TableHead>
-                  <TableHead className="text-right">Jumlah</TableHead>
-                  <TableHead>Keterangan</TableHead>
-                  <TableHead className="text-center">Aksi</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {props.transaksi.data && props.transaksi.data.length > 0 ? (
-                  props.transaksi.data.map((item) => (
-                    <TableRow key={`${item.jenis}-${item.id}`}>
-                      <TableCell className="font-medium">
-                        {new Date(item.tanggal).toLocaleDateString('id-ID', {
-                          day: '2-digit',
-                          month: 'long',
-                          year: 'numeric'
-                        })}
-                      </TableCell>
-                      <TableCell>
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                          item.jenis === 'pemasukan'
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-red-100 text-red-800'
+            {/* Desktop Table */}
+            <div className="hidden md:block">
+              <table className="min-w-full table-auto border-collapse">
+                <thead className="bg-gray-100 text-gray-700 text-sm">
+                  <tr>
+                    <th className="px-4 py-3 text-left">Tanggal</th>
+                    <th className="px-4 py-3 text-left">Jenis</th>
+                    <th className="px-4 py-3 text-left">Sumber</th>
+                    <th className="px-4 py-3 text-right">Jumlah</th>
+                    <th className="px-4 py-3 text-left">Keterangan</th>
+                    <th className="px-4 py-3 text-center">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody className="text-gray-600">
+                  {props.transaksi.data && props.transaksi.data.length > 0 ? (
+                    props.transaksi.data.map((item) => (
+                      <tr key={`${item.jenis}-${item.id}`} className="border-b hover:bg-gray-50">
+                        <td className="px-4 py-3 font-medium">
+                          {new Date(item.tanggal).toLocaleDateString('id-ID', {
+                            day: '2-digit',
+                            month: 'long',
+                            year: 'numeric'
+                          })}
+                        </td>
+                        <td className="px-4 py-3">
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                            item.jenis === 'pemasukan'
+                              ? 'bg-green-100 text-green-800'
+                              : 'bg-red-100 text-red-800'
+                          }`}>
+                            {item.jenis === 'pemasukan' ? 'Pemasukan' : 'Pengeluaran'}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3">{item.kategori}</td>
+                        <td className={`px-4 py-3 text-right font-medium ${
+                          item.jenis === 'pemasukan' ? 'text-green-600' : 'text-red-600'
                         }`}>
-                          {item.jenis === 'pemasukan' ? 'Pemasukan' : 'Pengeluaran'}
-                        </span>
-                      </TableCell>
-                      <TableCell>{item.kategori}</TableCell>
-                      <TableCell className={`text-right font-medium ${
-                        item.jenis === 'pemasukan' ? 'text-green-600' : 'text-red-600'
-                      }`}>
-                        {item.jenis === 'pemasukan' ? '+' : '-'} Rp {item.jumlah.toLocaleString('id-ID')}
-                      </TableCell>
-                      <TableCell>{item.keterangan}</TableCell>
-                      <TableCell className="text-center">
-                        <Link href={item.jenis === 'pemasukan'
-                          ? `/admin/kas/pemasukan/${item.id}/edit`
-                          : `/admin/kas/pengeluaran/${item.id}/edit`
-                        }>
-                          <Button variant="outline" size="sm">
-                            Edit
-                          </Button>
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={6} className="text-center py-8 text-gray-500">
-                      <FileText className="w-12 h-12 mx-auto mb-2 text-gray-300" />
-                      <p>Tidak ada data transaksi yang ditemukan</p>
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
+                          {item.jenis === 'pemasukan' ? '+' : '-'} Rp {item.jumlah.toLocaleString('id-ID')}
+                        </td>
+                        <td className="px-4 py-3">{item.keterangan}</td>
+                        <td className="px-4 py-3 text-center">
+                          <Link href={item.jenis === 'pemasukan'
+                            ? `/admin/kas/pemasukan/${item.id}/edit`
+                            : `/admin/kas/pengeluaran/${item.id}/edit`
+                          }>
+                            <button className="px-3 py-1 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700">
+                              Edit
+                            </button>
+                          </Link>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={6} className="px-4 py-8 text-center text-gray-500">
+                        <FileText className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                        <p>Tidak ada data transaksi yang ditemukan</p>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Cards */}
+            <div className="md:hidden">
+              {props.transaksi.data && props.transaksi.data.length > 0 ? (
+                <div className="divide-y">
+                  {props.transaksi.data.map((item) => (
+                    <div key={`${item.jenis}-${item.id}`} className="p-4 hover:bg-gray-50">
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                              item.jenis === 'pemasukan'
+                                ? 'bg-green-100 text-green-800'
+                                : 'bg-red-100 text-red-800'
+                            }`}>
+                              {item.jenis === 'pemasukan' ? 'Pemasukan' : 'Pengeluaran'}
+                            </span>
+                            <span className="text-sm text-gray-500">
+                              {new Date(item.tanggal).toLocaleDateString('id-ID', {
+                                day: '2-digit',
+                                month: 'short',
+                                year: 'numeric'
+                              })}
+                            </span>
+                          </div>
+                          <h3 className="font-medium text-gray-900">{item.kategori}</h3>
+                          <p className="text-sm text-gray-600 mt-1">{item.keterangan}</p>
+                        </div>
+                        <div className={`text-right font-medium ${
+                          item.jenis === 'pemasukan' ? 'text-green-600' : 'text-red-600'
+                        }`}>
+                          <div className="text-lg">
+                            {item.jenis === 'pemasukan' ? '+' : '-'} Rp {item.jumlah.toLocaleString('id-ID')}
+                          </div>
+                          <Link href={item.jenis === 'pemasukan'
+                            ? `/admin/kas/pemasukan/${item.id}/edit`
+                            : `/admin/kas/pengeluaran/${item.id}/edit`
+                          }>
+                            <button className="mt-2 px-3 py-1 bg-blue-600 text-white text-xs rounded-md hover:bg-blue-700">
+                              Edit
+                            </button>
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="p-8 text-center text-gray-500">
+                  <FileText className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                  <p>Tidak ada data transaksi yang ditemukan</p>
+                </div>
+              )}
+            </div>
           </CardContent>
         </Card>
 
         {/* Pagination */}
         {props.transaksi.links && props.transaksi.links.length > 3 && (
           <div className="mt-6 flex justify-center">
-            <nav className="flex gap-1">
+            <nav className="flex flex-wrap gap-1">
               {props.transaksi.links.map((link, index) => (
                 <Link
                   key={index}
                   href={link.url || '#'}
-                  className={`px-3 py-1 rounded-md ${
+                  className={`px-3 py-2 rounded-md text-sm ${
                     link.active
                       ? 'bg-blue-600 text-white'
                       : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
