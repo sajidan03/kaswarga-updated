@@ -24,31 +24,11 @@ class DashboardController extends Controller
             'total_categories' => Category::count(),
         ];
 
-        // Data pendapatan bulanan (12 bulan terakhir)
-        $monthlyRevenue = [];
-        for ($i = 11; $i >= 0; $i--) {
-            $date = Carbon::now()->subMonths($i);
-            $revenue = Payment::whereYear('created_at', $date->year)
-                ->whereMonth('created_at', $date->month)
-                ->sum('nominal');
+        // Data pendapatan bulanan dengan method yang sudah diperbaiki
+        $monthlyRevenue = $this->getMonthlyRevenueData();
 
-            $monthlyRevenue[] = [
-                'month' => $date->format('M Y'), // Format lebih lengkap
-                'revenue' => (int) $revenue
-            ];
-        }
-
-        // Data aktivitas pengguna (7 hari terakhir)
-        $userActivity = [];
-        for ($i = 6; $i >= 0; $i--) {
-            $date = Carbon::now()->subDays($i);
-            $activity = Payment::whereDate('created_at', $date->toDateString())->count();
-
-            $userActivity[] = [
-                'day' => $date->format('D'), // Nama hari
-                'active' => (int) $activity
-            ];
-        }
+        // Data aktivitas pengguna dengan method yang sudah diperbaiki
+        $userActivity = $this->getUserActivityData();
 
         // Pembayaran terbaru
         $recentPayments = Payment::with('user')
@@ -65,26 +45,12 @@ class DashboardController extends Controller
                 ];
             });
 
-        // Hitung pertumbuhan pendapatan (year-over-year)
-        $currentYear = Carbon::now()->year;
-        $previousYear = $currentYear - 1;
-
-        $currentYearRevenue = Payment::whereYear('created_at', $currentYear)->sum('nominal');
-        $previousYearRevenue = Payment::whereYear('created_at', $previousYear)->sum('nominal');
-
-        $revenueGrowth = 0;
-        if ($previousYearRevenue > 0) {
-            $revenueGrowth = (($currentYearRevenue - $previousYearRevenue) / $previousYearRevenue) * 100;
-        } elseif ($currentYearRevenue > 0) {
-            $revenueGrowth = 100;
-        }
-
         $dashboardData = array_merge($data, [
             'monthly_revenue' => $monthlyRevenue,
             'user_activity' => $userActivity,
             'recent_payments' => $recentPayments,
-            'revenue_growth' => (float) number_format($revenueGrowth, 1)
         ]);
+
         $profil = ProfilWebsite::all()->first();
 
         return Inertia::render('Admin/Dashboard', [
@@ -93,47 +59,46 @@ class DashboardController extends Controller
         ]);
     }
 
-   private function getMonthlyRevenueData()
-{
-    $monthlyRevenue = Payment::select(
-            DB::raw('YEAR(created_at) as year'),
-            DB::raw('MONTH(created_at) as month'),
-            DB::raw('COALESCE(SUM(nominal), 0) as revenue')
-        )
-        ->where('created_at', '>=', Carbon::now()->subMonths(11)->startOfMonth())
-        ->groupBy('year', 'month')
-        ->orderBy('year', 'asc')
-        ->orderBy('month', 'asc')
-        ->get();
+    private function getMonthlyRevenueData()
+    {
+        $monthlyRevenue = Payment::select(
+                DB::raw('YEAR(created_at) as year'),
+                DB::raw('MONTH(created_at) as month'),
+                DB::raw('COALESCE(SUM(nominal), 0) as revenue')
+            )
+            ->where('created_at', '>=', Carbon::now()->subMonths(11)->startOfMonth())
+            ->groupBy('year', 'month')
+            ->orderBy('year', 'asc')
+            ->orderBy('month', 'asc')
+            ->get();
 
-    // Pastikan ada 12 bulan data dengan nilai default 0
-    $fullYearData = [];
-    for ($i = 11; $i >= 0; $i--) {
-        $date = Carbon::now()->subMonths($i);
-        $monthYear = $date->format('M Y');
-        $yearMonth = $date->format('Y-m');
+        // Buat array untuk 12 bulan terakhir dengan nilai default
+        $fullYearData = [];
+        for ($i = 11; $i >= 0; $i--) {
+            $date = Carbon::now()->subMonths($i);
+            $monthYear = $date->format('M');
+            $yearMonth = $date->format('Y-m');
 
-        // Cari data yang sesuai
-        $revenue = 0;
-        foreach ($monthlyRevenue as $item) {
-            $itemDate = Carbon::create($item->year, $item->month);
-            if ($itemDate->format('Y-m') === $yearMonth) {
-                $revenue = (int) $item->revenue;
-                break;
+            // Cari data yang sesuai
+            $revenue = 0;
+            foreach ($monthlyRevenue as $item) {
+                $itemDate = Carbon::create($item->year, $item->month, 1);
+                if ($itemDate->format('Y-m') === $yearMonth) {
+                    $revenue = (int) $item->revenue;
+                    break;
+                }
             }
+
+            $fullYearData[] = [
+                'month' => $monthYear, // Hanya singkatan bulan
+                'revenue' => $revenue
+            ];
         }
 
-        $fullYearData[] = [
-            'month' => $monthYear,
-            'revenue' => $revenue
-        ];
+        return $fullYearData;
     }
 
-    return $fullYearData;
-}
-
-    // Alternatif: Query yang lebih efisien untuk data aktivitas
-    public function getUserActivityData()
+    private function getUserActivityData()
     {
         $userActivity = Payment::select(
                 DB::raw('DATE(created_at) as date'),
@@ -142,24 +107,27 @@ class DashboardController extends Controller
             ->where('created_at', '>=', Carbon::now()->subDays(6)->startOfDay())
             ->groupBy('date')
             ->orderBy('date', 'asc')
-            ->get()
-            ->map(function ($item) {
-                $date = Carbon::parse($item->date);
-                return [
-                    'day' => $date->format('D'),
-                    'active' => (int) $item->activity_count
-                ];
-            });
+            ->get();
 
-        // Pastikan ada data untuk semua 7 hari
+        // Buat array untuk 7 hari terakhir dengan nilai default
         $fullWeekData = [];
         for ($i = 6; $i >= 0; $i--) {
             $date = Carbon::now()->subDays($i);
-            $existingData = $userActivity->firstWhere('day', $date->format('D'));
+            $dayName = $date->locale('id')->translatedFormat('D'); // Hari dalam bahasa Indonesia
 
-            $fullWeekData[] = $existingData ?? [
-                'day' => $date->format('D'),
-                'active' => 0
+            // Cari data yang sesuai
+            $activity = 0;
+            foreach ($userActivity as $item) {
+                $itemDate = Carbon::parse($item->date);
+                if ($itemDate->format('Y-m-d') === $date->format('Y-m-d')) {
+                    $activity = (int) $item->activity_count;
+                    break;
+                }
+            }
+
+            $fullWeekData[] = [
+                'day' => $dayName,
+                'active' => $activity
             ];
         }
 
