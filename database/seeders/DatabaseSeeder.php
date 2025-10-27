@@ -77,51 +77,51 @@ class DatabaseSeeder extends Seeder
             'nominal' => 10000,
             'status' => 'active',
         ]);
-        Member::create([
-            'id_user' => 2,
-            'id_category' => 1,
-        ]);
-         Member::create([
-            'id_user' => 4,
-            'id_category' => 2,
-        ]);
-         Member::create([
-            'id_user' => 5,
-            'id_category' => 3,
-        ]);
-        Member::create([
-            'id_user' => 6,
-            'id_category' => 2,
-        ]);
-        Payment::create([
-            'id_user' => 2,
-            'period' => 'mingguan',
-            'nominal' => 10000,
-            'id_petugas' => 3,
-            'id_member' => 2,
-        ]);
-        Payment::create([
-            'id_user' => 4,
-            'period' => 'bulan',
-            'nominal' => 10000,
-            'id_petugas' => 3,
-            'id_member' => 2,
-        ]);
-        Payment::create([
-            'id_user' => 5,
-            'period' => 'tahunan',
-            'nominal' => 10000,
-            'id_petugas' => 3,
-            'id_member' => 2,
-        ]);
-        Payment::create([
-            'id_user' => 6,
-            'created_at' => '2025-10-01 12:00:00',
-            'period' => 'bulan',
-            'nominal' => 10000,
-            'id_petugas' => 3,
-            'id_member' => 2,
-        ]);
+        // Member::create([
+        //     'id_user' => 2,
+        //     'id_category' => 1,
+        // ]);
+        //  Member::create([
+        //     'id_user' => 4,
+        //     'id_category' => 2,
+        // ]);
+        //  Member::create([
+        //     'id_user' => 5,
+        //     'id_category' => 3,
+        // ]);
+        // Member::create([
+        //     'id_user' => 6,
+        //     'id_category' => 2,
+        // ]);
+        // Payment::create([
+        //     'id_user' => 2,
+        //     'period' => 'mingguan',
+        //     'nominal' => 10000,
+        //     'id_petugas' => 3,
+        //     'id_member' => 2,
+        // ]);
+        // Payment::create([
+        //     'id_user' => 4,
+        //     'period' => 'bulan',
+        //     'nominal' => 10000,
+        //     'id_petugas' => 3,
+        //     'id_member' => 2,
+        // ]);
+        // Payment::create([
+        //     'id_user' => 5,
+        //     'period' => 'tahunan',
+        //     'nominal' => 10000,
+        //     'id_petugas' => 3,
+        //     'id_member' => 2,
+        // ]);
+        // Payment::create([
+        //     'id_user' => 6,
+        //     'created_at' => '2025-10-01 12:00:00',
+        //     'period' => 'bulan',
+        //     'nominal' => 10000,
+        //     'id_petugas' => 3,
+        //     'id_member' => 2,
+        // ]);
         Pemasukan::create([
             'sumber' => 'Infaq',
             'nominal' => 10000,

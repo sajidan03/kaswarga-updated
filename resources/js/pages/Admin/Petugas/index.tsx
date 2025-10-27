@@ -18,7 +18,7 @@ interface PageProps {
   flash: {
     success?: string
   }
-  [key: string]: unknown
+  [key: string]: unknownww
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
