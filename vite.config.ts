@@ -32,6 +32,7 @@ import { defineConfig } from 'vite';
 import path from 'path';
 
 export default defineConfig({
+    base: '/kaswarga-updated',
     plugins: [
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.tsx'],
@@ -41,13 +42,16 @@ export default defineConfig({
         react(),
         tailwindcss(),
     ],
-
+    build: {
+        outDir: 'dist',
+    },
     server: {
         host: '0.0.0.0',
         port: 5173,
         strictPort: true,
         hmr: {
-            host: '192.168.130.158',
+            // host: '192.168.130.158',
+            host: 'localhost',
         },
     },
 
