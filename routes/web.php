@@ -84,6 +84,7 @@ Route::middleware(['auth', 'verified'])
         Route::get('dashboard', [PetugasController::class, 'petugasView'])->name('petugas.dashboard');
         Route::post('payment/{id}', [PetugasController::class, 'paymentDetail'])->name('petugasPaymentDetailPost');
         Route::get('payment/{id}', [PetugasController::class, 'paymentDetail'])->name('petugasPaymentDetailGet');
+        Route::post('payment/cancel/{id}', [PetugasController::class,'paymentCancel'])->name('petugasPaymentHapus');
     });
 
 require __DIR__ . '/settings.php';

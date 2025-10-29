@@ -28,6 +28,7 @@ interface PaymentPageProps {
   payment: PaymentItem[];
   error?: string;
   encrypted_id?: string;
+  [key:string] : unknown;
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -117,15 +118,19 @@ export default function PaymentDetail() {
     });
   };
 
-  const handleCancel = (id: number) => {
-    if (confirm('Yakin mau cancel pembayaran ini?')) {
-      router.delete(route('officer.payment.cancel', id), {
-        onSuccess: () => {
-          router.reload();
-        }
-      });
-    }
-  };
+const handleCancel = (id: number) => {
+  if (confirm('Yakin mau cancel pembayaran ini?')) {
+    router.post(`/petugas/payment/cancel/${id}`, {}, {
+      onSuccess: () => {
+        router.reload();
+      },
+      onError: (error) => {
+        console.error('Gagal membatalkan pembayaran:', error);
+        alert('Gagal membatalkan pembayaran');
+      }
+    });
+  }
+};
 
   // Suggestion values (kelipatan 10)
   const suggestionValues = [10000, 20000, 50000, 100000, 200000, 500000];
