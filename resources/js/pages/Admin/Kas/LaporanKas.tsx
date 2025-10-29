@@ -13,17 +13,14 @@ import {
   SelectItem,
 } from "@/components/ui/select"
 import {
-  ArrowLeft,
   Download,
   Filter,
   Plus,
   Search,
   FileText,
-  Calendar,
   DollarSign,
   TrendingUp,
   TrendingDown,
-  Eye,
   Minus
 } from "lucide-react"
 
@@ -57,6 +54,7 @@ interface PageProps {
     search: string
   }
   monthOptions: Array<{ value: string; label: string }>
+  [key:string] : unknown
 }
 
 export default function LaporanKas() {

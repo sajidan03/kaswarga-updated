@@ -1,7 +1,7 @@
 import AppLayout from '@/layouts/app-layout';
-import { Head, Link, usePage, router } from '@inertiajs/react';
+import { Head, usePage, router } from '@inertiajs/react';
 import { type BreadcrumbItem } from '@/types';
-import { useState, useEffect } from 'react';
+import { useState} from 'react';
 
 interface User {
   id: number;

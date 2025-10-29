@@ -180,7 +180,7 @@ public function paymentView()
         'profil' => $profil,
     ]);
 }
-    public function paymentCancel(Request $request, $id){
+    public function paymentCancel($id){
         $payment = Payment::findOrFail($id);
         $payment->delete();
     }
