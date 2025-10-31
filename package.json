@@ -2,13 +2,15 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "vite build",
         "build:ssr": "vite build && vite build --ssr",
-        "dev": "vite",
         "format": "prettier --write resources/",
         "format:check": "prettier --check resources/",
         "lint": "eslint . --fix",
-        "types": "tsc --noEmit"
+        "types": "tsc --noEmit",
+        "vercel-build": "chmod +x node_modules/.bin/vite && npm run build",
+        "build": "vite build",
+        "dev": "vite",
+        "preview": "vite preview"
     },
     "devDependencies": {
         "@eslint/js": "^9.19.0",
