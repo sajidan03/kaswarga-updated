@@ -4,8 +4,8 @@ FROM php:8.3-apache
 RUN apt-get update && apt-get install -y \
     git curl zip unzip libpng-dev libxml2-dev libzip-dev libonig-dev
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo pdo_mysql mbstring xml zip bcmath tokenizer fileinfo gd opcache
+# Install PHP extensions (tokenizer dihapus karena sudah include)
+RUN docker-php-ext-install pdo pdo_mysql mbstring xml zip bcmath fileinfo gd opcache
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
