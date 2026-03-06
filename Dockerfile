@@ -1,11 +1,11 @@
-FROM php:8.3-cli
+FROM php:8.3-fpm
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git curl zip unzip libpng-dev libxml2-dev libzip-dev libonig-dev
+    git curl zip unzip libpng-dev libxml2-dev libzip-dev
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo pdo_mysql mbstring xml zip bcmath tokenizer fileinfo gd opcache
+RUN docker-php-ext-install pdo pdo_mysql mbstring xml zip bcmath fileinfo gd opcache
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -28,4 +28,4 @@ RUN php artisan view:cache
 
 EXPOSE 8000
 
-CMD php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
