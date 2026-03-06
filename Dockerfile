@@ -1,9 +1,10 @@
-FROM php:8.3-cli
+FROM php:8.3-fpm
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git curl zip unzip libpng-dev libxml2-dev libzip-dev \
-    && rm -rf /var/lib/apt/lists/*
+    git curl zip unzip \
+    libpng-dev libxml2-dev libzip-dev \
+    libonig-dev libgd-dev
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql mbstring xml zip bcmath tokenizer fileinfo gd opcache
@@ -20,10 +21,8 @@ WORKDIR /var/www
 COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
-
-RUN npm ci
-
-RUN npx vite build
+RUN npm install
+RUN npm run build
 
 RUN php artisan config:cache
 RUN php artisan route:cache
