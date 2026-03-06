@@ -1,11 +1,11 @@
-FROM php:8.3-fpm
+FROM php:8.3-apache
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git curl zip unzip libpng-dev libxml2-dev libzip-dev
+    git curl zip unzip libpng-dev libxml2-dev libzip-dev libonig-dev
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo pdo_mysql mbstring xml zip bcmath fileinfo gd
+RUN docker-php-ext-install pdo pdo_mysql mbstring xml zip bcmath tokenizer fileinfo gd opcache
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -14,18 +14,21 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs
 
-WORKDIR /var/www
+WORKDIR /var/www/html
 
 COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
-RUN npm install
-RUN npm run build
+RUN npm install && npm run build
 
-RUN php artisan config:cache
-RUN php artisan route:cache
-RUN php artisan view:cache
+RUN php artisan config:cache || true
+RUN php artisan route:cache || true
+RUN php artisan view:cache || true
 
-EXPOSE 8000
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+EXPOSE 80
+
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+RUN sed -i 's|/var/www/html|${APACHE_DOCUMENT_ROOT}|g' /etc/apache2/sites-available/000-default.conf
+RUN a2enmod rewrite
