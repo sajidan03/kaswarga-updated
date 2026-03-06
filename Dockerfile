@@ -3,19 +3,20 @@ FROM node:20 AS node-builder
 
 WORKDIR /app
 
-# Copy package files
+# Copy semua file konfigurasi
 COPY package*.json ./
-COPY vite.config.js ./
-
-# Install dependencies
-RUN npm install
+COPY vite.config.ts ./
+COPY tsconfig.json ./
+COPY tailwind.config.js ./  
+COPY postcss.config.js ./   
 
 # Copy source files
 COPY resources ./resources
 COPY public ./public
 
-# Build assets
-RUN npm run build
+# Install dependencies dan build
+RUN npm install && \
+    npm run build
 
 # Stage 2: PHP dengan Apache
 FROM php:8.3-apache
@@ -33,10 +34,10 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copy aplikasi PHP
+# Copy semua file PHP
 COPY . .
 
-# Copy assets yang sudah di-build dari stage node
+# Copy assets yang sudah di-build dari node-builder
 COPY --from=node-builder /app/public/build ./public/build
 
 # Install dependencies PHP
