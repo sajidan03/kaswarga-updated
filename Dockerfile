@@ -50,11 +50,11 @@ RUN php artisan config:cache || true \
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Fix MPM conflict — hapus semua load MPM dari conf, pakai prefork saja
-RUN rm -f /etc/apache2/mods-enabled/mpm_*.load \
-    && rm -f /etc/apache2/mods-enabled/mpm_*.conf \
-    && ln -sf /etc/apache2/mods-available/mpm_prefork.load /etc/apache2/mods-enabled/mpm_prefork.load \
-    && ln -sf /etc/apache2/mods-available/mpm_prefork.conf /etc/apache2/mods-enabled/mpm_prefork.conf
+# Fix MPM — hapus semua conf yang mungkin ikut terbawa dari COPY . .
+RUN find /etc/apache2 -name "*.conf" -path "*/mods-enabled/*mpm*" -delete && \
+    find /etc/apache2 -name "*.load" -path "*/mods-enabled/*mpm*" -delete && \
+    ln -sf /etc/apache2/mods-available/mpm_prefork.load /etc/apache2/mods-enabled/mpm_prefork.load && \
+    ln -sf /etc/apache2/mods-available/mpm_prefork.conf /etc/apache2/mods-enabled/mpm_prefork.conf
 
 # Configure Apache
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf \
